@@ -10,7 +10,6 @@ package app;
  */
 public class Main
 {
-
 	/**
 	 * @param args
 	 */
@@ -18,7 +17,4 @@ public class Main
 	{
 		// Here goes nothing...
 	}
-	
-	
-
 }

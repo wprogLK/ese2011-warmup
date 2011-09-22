@@ -38,23 +38,23 @@ public class SimpleTest1
 	@Given("simpleTest1")
 	public App userAlphaNameShouldBeAlpha(App app) throws UserNameAlreadyExistException
 	{
-		User userAlpha=app.createUser("Alpha");
+		User userAlpha = app.createUser("Alpha");
 		assertEquals(userAlpha.getName(),"Alpha");
 		
 		return app;
 	}
 
 	@Given("simpleTest1")
-	public void preventCreatingUserWithAlreadyExistingNameTest()
+	public void preventCreatingUserWithAlreadyExistingNameTest(App app)
 	{
-		User fakeUser = new User("Alpha");
+		User fakeUser = new User("Alpha", app);
 		assertNotSame(fakeUser.getName(), "Alpha");
 	}
 
 	@Given("userAlphaNameShouldBeAlpha")
 	public App calendarOwnerShouldBeUserAlpha(App app) throws UnknownUserException
 	{
-		User userAlpha=app.getUser("Alpha");
+		User userAlpha = app.getUser("Alpha");
 		Calendar myCalendar = userAlpha.createNewCalendar("My calendar");
 		assertEquals(myCalendar.getOwner(),userAlpha);
 		
@@ -64,8 +64,8 @@ public class SimpleTest1
 	@Given("calendarOwnerShouldBeUserAlpha")
 	public App eventShouldBePrivate (App app) throws UnknownUserException, UnknownCalendarException, NoAccessToCalendarException
 	{
-		User userAlpha=app.getUser("Alpha");
-		Event myEvent=userAlpha.createPrivateEvent("My calendar", "My event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
+		User userAlpha = app.getUser("Alpha");
+		Event myEvent = userAlpha.createPrivateEvent("My calendar", "My event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
 		assertTrue(myEvent.isPrivate());
 		return app;
 	}
@@ -76,7 +76,7 @@ public class SimpleTest1
 		User userBeta = app.createUser("Beta");
 		User userAlpha = app.getUser("Alpha");
 		
-		Calendar calendarAlpha=userAlpha.getCalendar("My calendar");
+		Calendar calendarAlpha = userAlpha.getCalendar("My calendar");
 		
 		Event betaEvent = null;
 		try
@@ -84,7 +84,7 @@ public class SimpleTest1
 			betaEvent = calendarAlpha.createPrivateEvent("Not my event", new Date(), new Date(), userBeta);
 			fail("Expected NoAccessToCalendarException!");
 		}
-		catch(Calendar.NoAccessToCalendarException e)
+		catch(AppExceptions.NoAccessToCalendarException e)
 		{
 			assertNotNull(e);
 		}

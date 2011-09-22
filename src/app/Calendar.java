@@ -69,12 +69,12 @@ public class Calendar
 	{
 		this.checkUserIsOwner(user);
 		
-		ArrayList<Event> eventList=new ArrayList<Event>();
+		ArrayList<Event> eventList = new ArrayList<Event>();
 		
 		eventList.addAll(this.privateEvents);
 		eventList.addAll(this.publicEvents);
 		
-		eventList=this.getEventsWithStartDateOrMore(startDate, eventList);
+		eventList = this.getEventsWithStartDateOrMore(startDate, eventList);
 		
 //		this.sortEvents(eventList);
 		
@@ -92,7 +92,7 @@ public class Calendar
 	{
 		this.checkUserIsOwner(user);
 		
-		ArrayList<Event> eventList=new ArrayList<Event>();
+		ArrayList<Event> eventList = new ArrayList<Event>();
 		
 		eventList.addAll(this.privateEvents);
 		eventList.addAll(this.publicEvents);
@@ -110,7 +110,7 @@ public class Calendar
 	
 	public Event getEvent(String eventName, Date startDate) throws NoAccessToCalendarException, UnknownEventException
 	{
-		Iterator<Event> iteratorAllEvents=this.getAllEventsStarting(startDate, this.owner);
+		Iterator<Event> iteratorAllEvents = this.getAllEventsStarting(startDate, this.owner);
 		Event currentEvent = null;
 		
 		while(iteratorAllEvents.hasNext())
@@ -168,7 +168,7 @@ public class Calendar
 	{
 		//TODO: TEST THIS!
 		
-		ArrayList<Event> output=new ArrayList<Event>();
+		ArrayList<Event> output = new ArrayList<Event>();
 		
 		for(Event event:events)
 		{
@@ -185,7 +185,7 @@ public class Calendar
 	{
 		//TODO: TEST THIS!
 		
-		ArrayList<Event> output=new ArrayList<Event>();
+		ArrayList<Event> output = new ArrayList<Event>();
 		
 		for(Event event:events)
 		{
@@ -200,7 +200,7 @@ public class Calendar
 	
 	private ArrayList<Event> sortEvents(ArrayList<Event> inputList)
 	{
-		ArrayList<Event> output=new ArrayList<Event>();
+		ArrayList<Event> output = new ArrayList<Event>();
 		
 		//TODO
 		
@@ -211,7 +211,7 @@ public class Calendar
 	
 	private void checkUserIsOwner(User user) throws AppExceptions.NoAccessToCalendarException
 	{
-		if(this.owner!=user)
+		if(this.owner != user)
 		{
 			throw new AppExceptions.NoAccessToCalendarException(this);
 		}
