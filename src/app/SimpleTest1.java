@@ -3,10 +3,16 @@
  */
 package app;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.*;
 
+import app.AppExceptions.NoAccessToCalendarException;
+import app.AppExceptions.UnknownCalendarException;
+import app.AppExceptions.UnknownUserException;
+import app.AppExceptions.UserNameAlreadyExistException;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
 
@@ -19,51 +25,54 @@ import org.junit.runner.RunWith;
 public class SimpleTest1 
 {
 	@Test
-	public User simpleTest1()
+	public App simpleTest1()
 	{
-		return new User("Alpha");
+		App app=new App();
+	
+		return app;
 	}
 	
 	@Given("simpleTest1")
-	public User userAlphaNameShouldBeAlpha(User user)
+	public App userAlphaNameShouldBeAlpha(App app) throws UserNameAlreadyExistException
 	{
-		assertEquals(user.getName(),"Alpha");
+		User userAlpha=app.createUser("Alpha");
 		
-		return user;
+		assertEquals(userAlpha.getName(),"Alpha");
+		
+		return app;
 	}
 	
 	@Given("userAlphaNameShouldBeAlpha")
-	public Calendar calendarOwnerShouldBeUserAlpha(User user)
+	public App calendarOwnerShouldBeUserAlpha(App app) throws UnknownUserException
 	{
-		Calendar myCalendar=new Calendar(user,"My calendar");
+		User userAlpha=app.getUser("Alpha");
 		
-		assertEquals(myCalendar.getOwner(),user);
+		Calendar myCalendar=userAlpha.createNewCalendar("My calendar");
 		
-		return myCalendar;
+		assertEquals(myCalendar.getOwner(),userAlpha);
+		
+		return app;
 	}
 	
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public Event eventShouldBePrivate (Calendar calendar)
+	public App eventShouldBePrivate (App app) throws UnknownUserException, UnknownCalendarException, NoAccessToCalendarException
 	{
-		Event myEvent = null;
+		User userAlpha=app.getUser("Alpha");
+		Event myEvent=userAlpha.createPrivateEvent("My calendar", "My event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
+	
+		assertTrue(myEvent.isPrivate());
 		
-		try 
-		{
-			myEvent = calendar.createPrivateEvent("My event", new Date(), new Date(), calendar.getOwner());
-			assertTrue(myEvent.isPrivate());
-		} 
-		catch (Exception e) 
-		{
-			System.out.println(e.getMessage());
-		}
-		
-		return myEvent;
+		return app;
 	}
 	
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public User userBetaShouldNotAddAnEventToCalendarAlpha(Calendar calendarAlpha)
+	public App userBetaShouldNotAddAnEventToCalendarAlpha(App app) throws UserNameAlreadyExistException, UnknownUserException, UnknownCalendarException
 	{
-		User userBeta=new User("Beta");
+		User userBeta=app.createUser("Beta");
+		User userAlpha=app.getUser("Alpha");
+		
+		Calendar calendarAlpha=userAlpha.getCalendar("My calendar");
+		
 		
 		Event betaEvent =null;
 		
@@ -80,7 +89,23 @@ public class SimpleTest1
 			assertEquals(null, betaEvent);
 		}
 		
-		return userBeta;
+		return app;
+	}
+	
+	
+	private Date stringParseToDate(String strDate)
+	{
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+ 
+        try 
+        {
+			return sdf.parse(strDate);
+		} 
+        catch (ParseException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
 
