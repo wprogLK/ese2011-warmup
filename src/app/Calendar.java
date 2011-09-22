@@ -15,21 +15,27 @@ public class Calendar
 	private String name;
 	private User owner;
 	
-	private ArrayList<Event> events;
+	
+	private ArrayList<Event> privateEvents;
+	private ArrayList<Event> publicEvents;
 	
 	public Calendar(User owner, String name)
 	{
 		this.owner=owner;
 		this.name=name;
+		
+		this.privateEvents=new ArrayList<Event>();
+		this.publicEvents=new ArrayList<Event>();
 	}
 	
-	public void createPrivateEvent(String name, Date startDate, Date endDate, User user) throws NoAccessToCalendarException
+	public Event createPrivateEvent(String name, Date startDate, Date endDate, User user) throws NoAccessToCalendarException
 	{
 		if(this.owner.equals(user))
 		{
 			Event newEvent=new Event(name, startDate, endDate);
 			
-			this.events.add(newEvent);
+			this.privateEvents.add(newEvent);
+			return newEvent;
 		}
 		else
 		{
@@ -37,14 +43,15 @@ public class Calendar
 		}
 	}
 	
-	public void createPublicEvent(String name, Date startDate, Date endDate, User user) throws NoAccessToCalendarException
+	public Event createPublicEvent(String name, Date startDate, Date endDate, User user) throws NoAccessToCalendarException
 	{
 		if(this.owner.equals(user))
 		{
 			Event newEvent=new Event(name, startDate, endDate);
 			newEvent.setStatePublic();
 			
-			this.events.add(newEvent);
+			this.publicEvents.add(newEvent);
+			return newEvent;
 		}
 		else
 		{
@@ -55,6 +62,11 @@ public class Calendar
 	public User getOwner()
 	{
 		return this.owner;
+	}
+	
+	public String getName()
+	{
+		return this.name;
 	}
 	
 	private class NoAccessToCalendarException extends Exception
