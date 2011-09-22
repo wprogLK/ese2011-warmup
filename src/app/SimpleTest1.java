@@ -16,7 +16,7 @@ import org.junit.runner.RunWith;
  *
  */
 @RunWith(JExample.class)
-public class simpleTest1 
+public class SimpleTest1 
 {
 	@Test
 	public User simpleTest1()
@@ -57,9 +57,30 @@ public class simpleTest1
 			System.out.println(e.getMessage());
 		}
 		
-		
-		
 		return myEvent;
+	}
+	
+	@Given("calendarOwnerShouldBeUserAlpha")
+	public User userBetaShouldNotAddAnEventToCalendarAlpha(Calendar calendarAlpha)
+	{
+		User userBeta=new User("Beta");
+		
+		Event betaEvent =null;
+		
+		try
+		{
+			betaEvent=calendarAlpha.createPrivateEvent("Not my event", new Date(), new Date(), userBeta);
+		}
+		catch(Exception e)
+		{
+			//do nothing
+		}
+		finally
+		{
+			assertEquals(null, betaEvent);
+		}
+		
+		return userBeta;
 	}
 }
 
