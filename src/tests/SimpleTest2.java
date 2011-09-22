@@ -9,17 +9,13 @@ import java.util.Date;
 
 import org.junit.*;
 
-import app.App;
+import app.*;
 import app.AppExceptions.*;
-import app.AppExceptions.UnknownCalendarException;
-import app.AppExceptions.UnknownEventException;
-import app.Calendar;
-import app.Event;
-import app.User;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
 
 import org.junit.runner.RunWith;
+
 /**
  * @author Lukas Keller
  *
