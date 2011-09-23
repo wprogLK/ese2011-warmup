@@ -10,6 +10,7 @@ import java.util.Date;
  * @author Renato Corti
  *
  */
+
 public class Event 
 {
 	private enum State
@@ -18,23 +19,22 @@ public class Event
 	 PRIVATE
 	}
 
-	private String name;
+	private String eventName;
 	private Date startDate;
 	private Date endDate;
 	private State visibility;
 
 	/**
 	 * Constructor for specific event with the state 'private'
-	 * @param name A precise name / description for the event
+	 * @param eventName A precise name / description for the event
 	 * @param startDate The begin of the mentioned event
 	 * @param endDate The end of the mentioned event
 	 */
-	public Event(String name, Date startDate, Date endDate)
+	public Event(String eventName, Date startDate, Date endDate)
 	{
-		this.name = name;
+		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		
 		this.visibility = State.PRIVATE;
 	}
 
@@ -43,20 +43,19 @@ public class Event
 	 */
 	public Event()
 	{
-		this.name = "unkown event";
+		this.eventName = "unkown event";
 		this.startDate = new Date();
 		this.endDate = new Date();
-		
 		this.visibility = State.PRIVATE;
 	}
 
-	///////////
-	//GETTERS//
-	///////////
+	/////////////
+	// GETTERS //
+	/////////////
 
-	public String getName()
+	public String getEventName()
 	{
-		return this.name;
+		return this.eventName;
 	}
 	
 	public Date getStartDate()
@@ -79,13 +78,13 @@ public class Event
 		return (this.visibility == State.PUBLIC);
 	}
 
-	///////////
-	//SETTERS//
-	///////////
+	/////////////
+	// SETTERS //
+	/////////////
 
-	public void setName(String name)
+	public void setEventName(String name)
 	{
-		this.name = name;
+		this.eventName = name;
 	}
 
 	public void setStartDate(Date startDate)

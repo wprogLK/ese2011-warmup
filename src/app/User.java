@@ -15,15 +15,17 @@ import app.AppExceptions.UnknownCalendarException;
  * @author Renato Corti
  *
  */
+
 public class User 
 {
 	private ArrayList<Calendar> calendars;
 	private String name;
 	private App app;
-	
+
 	/**
 	 * Default constructor
 	 * @param name The name of the user
+	 * @param app 
 	 */
 	public User(String name, final App app)
 	{
@@ -37,13 +39,13 @@ public class User
 		return this.name;
 	}
 
-	/////////////
-	//CALENDARS//
-	/////////////
+	///////////////
+	// CALENDARS //
+	///////////////
 
 	public Calendar createNewCalendar(String nameOfCalendar)
 	{
-		Calendar newCalendar = new Calendar(this,nameOfCalendar);
+		Calendar newCalendar = new Calendar(this, nameOfCalendar);
 		this.calendars.add(newCalendar);
 		return newCalendar;
 	}
@@ -57,10 +59,10 @@ public class User
 	public Calendar getCalendar(String calendarName) throws AppExceptions.UnknownCalendarException
 	{
 		Iterator<Calendar> iteratorCalendar = this.calendars.iterator();
-		while(iteratorCalendar.hasNext())
+		while (iteratorCalendar.hasNext())
 		{
 			Calendar currentCalendar = iteratorCalendar.next();
-			if(currentCalendar.getName().equals(calendarName))
+			if (currentCalendar.getName().equals(calendarName))
 			{
 				return currentCalendar;
 			}
@@ -72,7 +74,7 @@ public class User
 	{
 		String allCalendarNames = "";
 		
-		for(Calendar c:this.calendars)
+		for (Calendar c : this.calendars)
 		{
 			allCalendarNames += " - " + c.getName() + "\n";
 		}
@@ -88,14 +90,14 @@ public class User
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
-		return calendar.getAllEventsDate(date,this);
+		return calendar.getAllEventsDate(date, this);
 	}
 
 	public Iterator<Event> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
-		return  calendar.getAllEventsStarting(startDate,this);
+		return  calendar.getAllEventsStarting(startDate, this);
 	}
 
 	public Iterator<Event> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException
@@ -112,9 +114,9 @@ public class User
 		return calendar.getAllPublicEventsDate(date);
 	}
 
-	//////////
-	//EVENTS//
-	//////////
+	////////////
+	// EVENTS //
+	////////////
 
 	public Event createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, NoAccessToCalendarException
 	{
