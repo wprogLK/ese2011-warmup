@@ -2,8 +2,8 @@
  * Calendar framework
  */
 package app;
-
 import java.util.Date;
+import app.AppExceptions.*;
 
 /**
  * @author Lukas Keller
@@ -29,23 +29,18 @@ public class Event
 	 * @param eventName A precise name / description for the event
 	 * @param startDate The begin of the mentioned event
 	 * @param endDate The end of the mentioned event
+	 * @throws InvalidDateException 
 	 */
-	public Event(String eventName, Date startDate, Date endDate)
+	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
+		if (startDate.after(endDate))
+		{
+			throw new InvalidDateException(startDate, endDate);
+		}
+
 		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.visibility = State.PRIVATE;
-	}
-
-	/**
-	 * Default constructor
-	 */
-	public Event()
-	{
-		this.eventName = "unkown event";
-		this.startDate = new Date();
-		this.endDate = new Date();
 		this.visibility = State.PRIVATE;
 	}
 

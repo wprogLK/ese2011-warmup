@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import app.AppExceptions.NoAccessToCalendarException;
+import app.AppExceptions.AccessDeniedException;
+import app.AppExceptions.InvalidDateException;
 import app.AppExceptions.UnknownCalendarException;
 
 /**
@@ -20,16 +21,9 @@ public class User
 {
 	private ArrayList<Calendar> calendars;
 	private String name;
-	private App app;
 
-	/**
-	 * Default constructor
-	 * @param name The name of the user
-	 * @param app 
-	 */
 	public User(String name, final App app)
 	{
-		this.app = app;
 		this.name = name;
 		this.calendars = new ArrayList<Calendar>();
 	}
@@ -86,28 +80,28 @@ public class User
 		return this.calendars.isEmpty();
 	}
 
-	public ArrayList<Event> getMyCalendarAllEventsDate(String calendarName, Date date) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException 
+	public ArrayList<Event> getMyCalendarAllEventsDate(String calendarName, Date date) throws AppExceptions.UnknownCalendarException, AccessDeniedException 
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
 		return calendar.getAllEventsDate(date, this);
 	}
 
-	public Iterator<Event> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException
+	public Iterator<Event> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException, AccessDeniedException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
 		return  calendar.getAllEventsStarting(startDate, this);
 	}
 
-	public Iterator<Event> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException
+	public Iterator<Event> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws AppExceptions.UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
 		return calendar.getAllPublicEventsStarting(startDate);
 	}
 
-	public ArrayList<Event> getMyCalendarPublicEventsDate(String calendarName, Date date) throws AppExceptions.UnknownCalendarException, NoAccessToCalendarException 
+	public ArrayList<Event> getMyCalendarPublicEventsDate(String calendarName, Date date) throws AppExceptions.UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
@@ -118,14 +112,14 @@ public class User
 	// EVENTS //
 	////////////
 
-	public Event createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, NoAccessToCalendarException
+	public Event createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
 		return calendar.createPublicEvent(eventName, startDate, endDate, this);
 	}
 
-	public Event createPrivateEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, NoAccessToCalendarException
+	public Event createPrivateEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		
