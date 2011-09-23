@@ -1,7 +1,7 @@
 /**
  * Calendar framework
  */
-package app;
+package tests;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +10,11 @@ import java.util.Date;
 import org.junit.*;
 import org.junit.runner.RunWith;
 
+import app.App;
+import app.AppExceptions;
+import app.Calendar;
+import app.Event;
+import app.User;
 import app.AppExceptions.NoAccessToCalendarException;
 import app.AppExceptions.UnknownCalendarException;
 import app.AppExceptions.UnknownUserException;
@@ -44,11 +49,25 @@ public class SimpleTest1
 		return app;
 	}
 
-	@Given("simpleTest1")
+	@Given("userAlphaNameShouldBeAlpha")
 	public void preventCreatingUserWithAlreadyExistingNameTest(App app)
 	{
-		User fakeUser = new User("Alpha", app);
-		assertNotSame(fakeUser.getName(), "Alpha");
+		User fakeUser = null;
+		
+		try 
+		{
+			fakeUser = app.createUser("Alpha");
+			assert(false);
+		} 
+		catch (UserNameAlreadyExistException e)
+		{
+
+		}
+		finally
+		{
+			assertNull(fakeUser);
+		}
+		
 	}
 
 	@Given("userAlphaNameShouldBeAlpha")
@@ -93,20 +112,7 @@ public class SimpleTest1
 	}
 	
 	
-	private Date stringParseToDate(String strDate)
-	{
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
- 
-        try 
-        {
-			return sdf.parse(strDate);
-		} 
-        catch (ParseException e) 
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
+	
 
 	@Given("calendarOwnerShouldBeUserAlpha")
 	public void createNewEventTest()
@@ -176,4 +182,23 @@ public class SimpleTest1
 		// TODO: Not implemented
 	}
 
+	
+	///////////////////
+	//PRIVATE METHODS//
+	///////////////////
+	
+	private Date stringParseToDate(String strDate)
+	{
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+ 
+        try 
+        {
+			return sdf.parse(strDate);
+		} 
+        catch (ParseException e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
