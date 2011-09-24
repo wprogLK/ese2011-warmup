@@ -11,7 +11,7 @@ import app.AppExceptions.*;
  *
  */
 
-public class Event 
+public class Event
 {
 	private enum State
 	{

@@ -5,6 +5,7 @@ package tests;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -13,9 +14,6 @@ import org.junit.runner.RunWith;
 
 import app.App;
 import app.AppExceptions.*;
-import app.AppExceptions.AccessDeniedException;
-import app.AppExceptions.InvalidDateException;
-import app.AppExceptions.UnknownUserException;
 import app.Calendar;
 import app.Event;
 import app.User;
@@ -28,8 +26,9 @@ import static org.junit.Assert.*;
  *
  */
 
+//FIXME: Rename SimpleTest1 to something like User-specific Tests
 @RunWith(JExample.class)
-public class SimpleTest1 
+public class SimpleTest1
 {
 
 	User userAlpha;
@@ -54,11 +53,11 @@ public class SimpleTest1
 	public App preventCreatingUserWithAlreadyExistingNameTest(App app)
 	{
 		User fakeUser = null;
-		try 
+		try
 		{
 			fakeUser = app.createUser("Alpha", "456");
 			fail("UserNameAlreadyExistException expected!");
-		} 
+		}
 		catch (UserNameAlreadyExistException e)
 		{
 			assertNotNull(e);
@@ -68,10 +67,90 @@ public class SimpleTest1
 	}
 
 	@Given("userAlphaNameShouldBeAlpha")
+	public App shouldNotRetrieveNonExistentUser(App app) throws AccessDeniedException
+	{
+		User nonExistentUser = null;
+		try
+		{
+			nonExistentUser = app.loginUser("Beta", "abc");
+			fail("UnknownUserException expected!");
+		}
+		catch (UnknownUserException e)
+		{
+			assertNotNull(e);
+		}
+		assertNull(nonExistentUser);
+		return app;
+	}
+
+	@Given("userAlphaNameShouldBeAlpha")
+	public App shouldNotRetrieveCalendarOrEventsFromFictitiousUser(App app) throws UnknownCalendarException, AccessDeniedException
+	{
+		ArrayList<String> fictiousCalendarNames = null;
+
+		try
+		{
+			fictiousCalendarNames = app.getAllCalendarsNamesFromUser("Beta");
+			fail("UnknownUserException expected!");
+		}
+		catch (UnknownUserException e)
+		{
+			assertNotNull(e);
+		}
+		assertNull(fictiousCalendarNames);
+
+		try
+		{
+			app.getUsersCalendarPublicEvents("Beta", "Fictitious Calendar", stringParseToDate("23.9.2011"));
+			fail("UnknownUserException expected!");
+		}
+		catch (UnknownUserException e)
+		{
+			assertNotNull(e);
+		}
+		assertNull(fictiousCalendarNames);
+
+		try
+		{
+			app.getUsersCalendarPublicEventsOverview("Beta", "Fictitious Calendar", stringParseToDate("23.9.2011"));
+			fail("UnknownUserException expected!");
+		}
+		catch (UnknownUserException e)
+		{
+			assertNotNull(e);
+		}
+		assertNull(fictiousCalendarNames);
+
+		return app;
+	}
+
+	@Given("userAlphaNameShouldBeAlpha")
 	public App calendarOwnerShouldBeUserAlpha(App app)
 	{
 		Calendar myCalendar = userAlpha.createNewCalendar("My calendar");
 		assertEquals(myCalendar.getOwner(), userAlpha);
+		return app;
+	}
+
+	@Given("calendarOwnerShouldBeUserAlpha")
+	public App deleteCalendarFromUserAlpha(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
+	{
+		userAlpha.createNewCalendar("Short-living calendar");
+		userAlpha.createPrivateEvent("Short-living calendar", "My private event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
+		userAlpha.createPublicEvent("Short-living calendar", "My public event", this.stringParseToDate("23.01.2011"), this.stringParseToDate("23.08.2011"));
+
+		userAlpha.deleteCalendar("Short-living calendar");
+		try
+		{
+			userAlpha.getCalendar("Short-living calendar");
+			fail("UnknownCalendarException expected!");
+		}
+		catch (UnknownCalendarException e)
+		{
+			assertNotNull(e);
+		}
+
+		assertEquals(1, userAlpha.getAllMyCalendarNames().size());
 		return app;
 	}
 
@@ -128,7 +207,7 @@ public class SimpleTest1
 	}
 
 	@Given("userBetaShouldNotAccessForeignUserAcount")
-	public App changeUserPasswordTest(App app) throws UserNameAlreadyExistException, UnknownUserException, AccessDeniedException
+	public App changeUserPasswordTest(App app) throws UnknownUserException, AccessDeniedException
 	{
 		app.changePassword("Beta", "abc", "xyz");
 		User userBetaNew = app.loginUser("Beta", "xyz");
@@ -150,6 +229,9 @@ public class SimpleTest1
 			i++;
 		}
 		assertEquals(1, i);
+
+		ArrayList<Event> arrayListPublicEvents = app.getUsersCalendarPublicEventsOverview("Alpha", "My calendar", this.stringParseToDate("22.01.2011"));
+		assertEquals(1, arrayListPublicEvents.size());
 		return app;
 	}
 
@@ -170,7 +252,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePrivate")
-	public App validEventStringButInvalidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
+	public App invalidEventStringButValidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
 	{
 		Calendar calendarAlpha = userAlpha.getCalendar("My calendar");
 		Event unrealEvent = null;
@@ -188,7 +270,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePrivate")
-	public App invalidEventStringButValidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
+	public App validEventStringButInvalidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
 	{
 		Calendar calendarAlpha = userAlpha.getCalendar("My calendar");
 		Event phantomEvent = null;
@@ -204,20 +286,20 @@ public class SimpleTest1
 		assertNull(phantomEvent);
 		return app;
 	}
-	
+
 	///////////////////
 	//PRIVATE METHODS//
 	///////////////////
 	
 	private Date stringParseToDate(String strDate)
 	{
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
- 
-        try 
-        {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+
+		try
+		{
 			return sdf.parse(strDate);
-		} 
-        catch (ParseException e) 
+		}
+		catch (ParseException e)
 		{
 			e.printStackTrace();
 			return null;

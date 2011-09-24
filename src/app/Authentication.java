@@ -1,11 +1,11 @@
 /**
- * 
+ * Calendar framework
  */
 package app;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import app.AppExceptions.AccessDeniedException;
+
 import app.AppExceptions.*;
 
 /**
@@ -13,6 +13,7 @@ import app.AppExceptions.*;
  * @author Renato Corti
  *
  */
+
 public class Authentication
 {
 	private ArrayList<Tuple> userDatabase;
@@ -74,6 +75,8 @@ public class Authentication
 	 * It is intended that the User Object reaches the external user interface
 	 * and the user has access to the user object and its methods (add, modify, delete events).
 	 * So this function requires a password.
+	 * For access to read only functions and public events
+	 * there is the {@link Authentication#getUser(String)} funcion available, which does not ask for a password.
 	 * @param username 
 	 * @param password 
 	 * @return Provides the user object.
@@ -102,11 +105,12 @@ public class Authentication
 	}
 
 	/** This is a more permissive function to get the user object.
-	 * The difference to the overloaded getUser function is, that the user object
-	 * does not reach the outer interface and can therefore not be used
+	 * It does not ask for a password.
+	 * The difference to the overloaded {@link Authentication#getUser(String, String)} function is,
+	 * that the user object does not reach the outer interface and can therefore not be used
 	 * to provide write access to the calendar (add, modify, delete events)
 	 * @param username 
-	 * @return Provides the user object.
+	 * @return User object.
 	 * @throws UnknownUserException 
 	 */
 	public User getUser(String username) throws UnknownUserException

@@ -1,5 +1,5 @@
 /**
- * 
+ * Calendar framework
  */
 package app;
 
@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import app.AppExceptions.AccessDeniedException;
-import app.AppExceptions.UnknownUserException;
-import app.AppExceptions.UserNameAlreadyExistException;
 import app.AppExceptions.*;
 
 /**
@@ -27,9 +24,7 @@ public class App
 		this.auth = new Authentication();
 	}
 
-	///////////
-	// USERS //
-	///////////
+	/* Functions for the user management */
 
 	public User createUser(String username, String password) throws UserNameAlreadyExistException
 	{
@@ -46,20 +41,16 @@ public class App
 		this.auth.deleteUser(userName, password);
 	}
 
-	////////////////////////////
-	// GET CALENDARS & EVENTS //
-	////////////////////////////
+	/* Getters for calendars & events for users that are not owners of the calendars */
 
-	//****************//
-	//***OTHER USER***//
-	//****************//
-
-	/** Provides all calendar names as Strings on a specific users.
-	 * @param userName Owner of the calendar
-	 * @return String with all calendar names of the user.
+	/** Provides all calendar names as an ArrayList of strings of a specific users.
+	 * The user object used here must not leave this function as it does not ask for a password for it.
+	 * @param userName Owner of the calendars requested
+	 * @return ArrayList with all calendar names of the user as represented as strings.
 	 * @throws UnknownUserException if no valid user was provided.
+	 * @see App#loginUser(String, String)
 	 */
-	public String getAllCalendarsNamesFromUser(String userName) throws UnknownUserException
+	public ArrayList<String> getAllCalendarsNamesFromUser(String userName) throws UnknownUserException
 	{
 		User user = this.auth.getUser(userName);
 		return user.getAllMyCalendarNames();
@@ -67,6 +58,7 @@ public class App
 
 	/**
 	 * Returns all public events from a named calendar that belong to the given user.
+	 * The user object used here must not leave this function as it does not ask for a password for it.
 	 * @param userName Owner of the calendar.
 	 * @param calendarName Title of a calendar to identify it.
 	 * @param date Self-explanatory!
@@ -74,6 +66,7 @@ public class App
 	 * @throws UnknownUserException if no valid user was provided.
 	 * @throws UnknownCalendarException 
 	 * @throws AccessDeniedException 
+	 * @see App#loginUser(String, String)
 	 */
 	public ArrayList<Event> getUsersCalendarPublicEventsOverview(String userName, String calendarName, Date date) throws UnknownUserException, UnknownCalendarException, AccessDeniedException
 	{
@@ -83,6 +76,7 @@ public class App
 
 	/**
 	 * Returns all public events from a named calendar that belong to the given user.
+	 * The user object used here must not leave this function as it does not ask for a password for it.
 	 * @param userName Owner of the calendar.
 	 * @param calendarName Title of a calendar to identify it.
 	 * @param startDate Self-explanatory!
@@ -100,7 +94,10 @@ public class App
 	/**
 	 * @param username Self-explanatory!
 	 * @param password Self-explanatory!
-	 * @return Provides the user object.
+	 * @return Returns the user object provided that the user exists and the corresponding
+	 * password for the given user is correct.
+	 * Not to be confused with the {@link Authentication#getUser(String, String)} function which is only
+	 * available for internal processing.
 	 * @throws UnknownUserException
 	 * @throws AccessDeniedException
 	 */

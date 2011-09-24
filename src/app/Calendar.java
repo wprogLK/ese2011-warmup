@@ -15,7 +15,7 @@ import app.AppExceptions.*;
  *
  */
 
-public class Calendar 
+public class Calendar
 {
 	private String name;
 	private User owner;
@@ -76,9 +76,8 @@ public class Calendar
 
 	/** Used to get a list with public events from the specified calendar
 	 * @param startDate Self-explanatory!
-	 * @return All public events from a specified calendar that belong to the very same user.
+	 * @return All public events from a specified calendar that belong to the very same user
 	 * other than this one using this function.
-	 * 
 	 */
 	public Iterator<Event> getAllPublicEventsStarting(Date startDate)
 	{
@@ -87,12 +86,14 @@ public class Calendar
 
 	/** Returns all (public and private) events from the specified calendar.
 	 * It is not intended being used from a user, that is not the owner of the specified calendar
-	 * since that will trigger an error. Use getAllPublicEventsDate instead.
+	 * since that will trigger an error. Use {@link Calendar#getAllPublicEventsDate(Date)} instead.
 	 * @param date Self-explanatory!
-	 * @param user 
+	 * @param user This function assumes that only the owner of the calendar has the user object
+	 * at his / her disposal (not the user name as string) because
+	 * in order to get the user object, a password is required.
 	 * @return All events in the calendar.
 	 * @throws AccessDeniedException 
-	 * 
+	 * @see Authentication#getUser(String, String)
 	 */
 	public ArrayList<Event> getAllEventsDate(Date date, User user) throws AccessDeniedException
 	{
@@ -119,7 +120,6 @@ public class Calendar
 	 * @return The desired event object to read, mess up (edit) or trash.
 	 * @throws AccessDeniedException 
 	 * @throws UnknownEventException 
-	 * 
 	 */
 	public Event getEvent(String eventName, Date startDate) throws AccessDeniedException, UnknownEventException
 	{
@@ -212,6 +212,11 @@ public class Calendar
 //		return output;
 //	}
 
+	/** Usually this function would never throw an exception
+	 * because is should not be possible to get a calendar object
+	 * without having an user object which in turn should only be passed when providing a password.
+	 * Nevertheless this function was added as a precautionary measure against unpleasant surprises.
+	 */
 	private void checkUserIsOwner(User user) throws AccessDeniedException
 	{
 		if (this.owner != user)

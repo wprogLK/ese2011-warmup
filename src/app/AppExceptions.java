@@ -1,5 +1,5 @@
 /**
- * 
+ * Calendar framework
  */
 package app;
 
@@ -10,6 +10,7 @@ import java.util.Date;
  * @author Renato Corti
  *
  */
+
 public abstract class AppExceptions
 {
 
@@ -36,24 +37,13 @@ public abstract class AppExceptions
 	}
 
 	/**
-	 * If the database is empty.
-	 */
-	public static class NoUserExistException extends Exception
-	{
-		public NoUserExistException()
-		{
-			super("No user exist! Start creating a new user!");
-		}
-	}
-
-	/**
 	 * When passwords do not match up
 	 */
 	public static class AccessDeniedException extends Exception
 	{
 		public AccessDeniedException(Calendar calendar)
 		{
-			super(String.format("You are not allowed to create, edit or delete events in the calender \"%s\"!", calendar.getOwner().getName()));
+			super(String.format("User \"%s\" did not give you permission to create, edit or delete events in the calendar \"%s\"!", calendar.getOwner().getName(), calendar.getName()));
 		}
 
 		public AccessDeniedException(String username)
