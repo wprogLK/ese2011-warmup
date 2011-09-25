@@ -29,7 +29,7 @@ public class Event
 	 * @param eventName A precise name / description for the event
 	 * @param startDate The begin of the mentioned event
 	 * @param endDate The end of the mentioned event
-	 * @throws InvalidDateException 
+	 * @throws InvalidDateException If the end date is placed before the start date.
 	 */
 	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
@@ -44,9 +44,7 @@ public class Event
 		this.visibility = State.PRIVATE;
 	}
 
-	/////////////
-	// GETTERS //
-	/////////////
+	/* Getters */
 
 	public String getEventName()
 	{
@@ -73,9 +71,7 @@ public class Event
 		return (this.visibility == State.PUBLIC);
 	}
 
-	/////////////
-	// SETTERS //
-	/////////////
+	/* Setters*/
 
 	public void setEventName(String name)
 	{

@@ -30,7 +30,7 @@ public class SimpleTest2
 	private Calendar calendarAlpha;
 
 	@Test
-	public App oneUserTest() throws UserNameAlreadyExistException
+	public App oneUserTest() throws UsernameAlreadyExistException
 	{
 		App app = new App();
 		this.userAlpha = app.createUser("Alpha", "123");

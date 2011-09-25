@@ -20,8 +20,8 @@ public class User
 	private ArrayList<Calendar> calendars;
 	private String name;
 
-	/**
-	 * @param name 
+	/** Constructor for an user object. It contains the {@link Calendar} object.
+	 * @param name The user name must be unique.
 	 * @param app  
 	 */
 	public User(String name, final App app)
@@ -35,10 +35,12 @@ public class User
 		return this.name;
 	}
 
-	///////////////
-	// CALENDARS //
-	///////////////
+	/* Operations on calendars */
 
+	/** Cretes a new {@link Calendar} for the specified user.
+	 * @param nameOfCalendar The title of the calendar to be created.
+	 * @return The created calendar.
+	 * */
 	public Calendar createNewCalendar(String nameOfCalendar)
 	{
 		Calendar newCalendar = new Calendar(this, nameOfCalendar);
@@ -46,12 +48,21 @@ public class User
 		return newCalendar;
 	}
 
+	/** Removes the calendar including all events in it from the user.
+	 * @param nameOfCalendar The title the calendar was given at creation time.
+	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
+	 */
 	public void deleteCalendar(String nameOfCalendar) throws UnknownCalendarException
 	{
 		Calendar calendarToDelete = this.getCalendar(nameOfCalendar);
 		this.calendars.remove(calendarToDelete);
 	}
 
+	/** Provides a {@link Calendar} object. It can be used to perform further operations on the calendar.
+	 * @param calendarName The title the calendar was given at creation time.
+	 * @return The calendar with the corresponding {@code calendarName}.
+	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
+	 */
 	public Calendar getCalendar(String calendarName) throws UnknownCalendarException
 	{
 		Iterator<Calendar> iteratorCalendar = this.calendars.iterator();
@@ -66,6 +77,9 @@ public class User
 		throw new UnknownCalendarException(calendarName);
 	}
 
+	/** Provides an {@link ArrayList} with all calendar titles created by the user.
+	 * @return The string literals of the calendars as {@link ArrayList}.
+	 */
 	public ArrayList<String> getAllMyCalendarNames()
 	{
 		ArrayList<String> allCalendarNames = new ArrayList<String>();
@@ -77,6 +91,9 @@ public class User
 		return allCalendarNames;
 	}
 
+	/** Tells, if the user has any calendars.
+	 * @return If the {@link Calendar} {@link ArrayList} is empty, {@code true} is returned, {@code false} in all other cases.
+	 */
 	public boolean hasNoCalendar()
 	{
 		return this.calendars.isEmpty();
@@ -110,9 +127,7 @@ public class User
 		return calendar.getAllPublicEventsDate(date);
 	}
 
-	////////////
-	// EVENTS //
-	////////////
+	/* Operation on events */
 
 	public Event createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
 	{

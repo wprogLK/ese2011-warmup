@@ -14,6 +14,10 @@ import app.AppExceptions.*;
  *
  */
 
+/**
+ * Handles the user database with the corresponding passwords and functions to alter or
+ * access the {@link User} objects used for read-write access to calendars and events.
+ */
 public class Authentication
 {
 	private ArrayList<Tuple> userDatabase;
@@ -50,7 +54,7 @@ public class Authentication
 		}
 	}
 
-	public User createNewUser(String username, String password, App app) throws UserNameAlreadyExistException
+	public User createNewUser(String username, String password, App app) throws UsernameAlreadyExistException
 	{
 		isUsernameUnused(username);
 
@@ -59,28 +63,29 @@ public class Authentication
 		return newUser;
 	}
 
-	private void isUsernameUnused(String username) throws UserNameAlreadyExistException
+	private void isUsernameUnused(String username) throws UsernameAlreadyExistException
 	{
 		for (Tuple t : userDatabase)
 		{
 			if (t.getUsername().equals(username))
 			{
-				throw new UserNameAlreadyExistException(username); 
+				throw new UsernameAlreadyExistException(username); 
 			}
 		}
 	}
 
 	/** Used to get the User object which is required to work with calendar objects (add, modify, delete events).
 	 * This are actions, that should only be performed by the owner of the calendar.
-	 * It is intended that the User Object reaches the external user interface
-	 * and the user has access to the user object and its methods (add, modify, delete events).
+	 * It is intended that the {@link User} reaches the external user interface
+	 * that the user has access to its methods (add, modify, delete events, calendars).
 	 * So this function requires a password.
 	 * For access to read only functions and public events
-	 * there is the {@link Authentication#getUser(String)} funcion available, which does not ask for a password.
-	 * @param username 
-	 * @param password 
-	 * @return Provides the user object.
-	 * @throws UnknownUserException 
+	 * there is the {@link Authentication#getUser(String)} function available, which does not ask for a password.
+	 * but must not reach the outer interface.
+	 * @param username The user object that is to be passed.
+	 * @param password The secret to verify access.
+	 * @return Provides the {@link User}.
+	 * @throws UnknownUserException If {@code username} is not in the database.
 	 * @throws AccessDeniedException 
 	 */
 	public User getUser(String username, String password) throws UnknownUserException, AccessDeniedException
@@ -104,14 +109,13 @@ public class Authentication
 		throw new UnknownUserException(username);
 	}
 
-	/** This is a more permissive function to get the user object.
-	 * It does not ask for a password.
-	 * The difference to the overloaded {@link Authentication#getUser(String, String)} function is,
-	 * that the user object does not reach the outer interface and can therefore not be used
-	 * to provide write access to the calendar (add, modify, delete events)
-	 * @param username 
-	 * @return User object.
-	 * @throws UnknownUserException 
+	/** This is a more permissive function to get the {@link User}. It does not ask for a password.
+	 * In contrast to {@link Authentication#getUser(String, String)},
+	 * functions using this routine must not pass the user object to the outer interface
+	 * since it provides write access to calendars (add, modify, delete events) as well.
+	 * @param username {@link User} from which calendars titles or public events are needed.
+	 * @return User object used to gain access to all {@link Calendar} objects.
+	 * @throws UnknownUserException If {@code username} is not in the database.
 	 */
 	public User getUser(String username) throws UnknownUserException
 	{
@@ -140,12 +144,6 @@ public class Authentication
 		}
 	}
 
-	/**
-	 * @param username 
-	 * @param password 
-	 * @throws UnknownUserException 
-	 * @throws AccessDeniedException 
-	 */
 	public void deleteUser(String username, String password) throws UnknownUserException, AccessDeniedException
 	{
 		this.getUser(username, password);

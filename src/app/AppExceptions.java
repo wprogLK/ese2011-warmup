@@ -15,29 +15,29 @@ public abstract class AppExceptions
 {
 
 	/**
-	 * If an username is not in the database.
+	 * If {@code username} is not in the database.
 	 */
 	public static class UnknownUserException extends Exception
 	{
-		public UnknownUserException(String userName)
+		public UnknownUserException(String username)
 		{
-			super(String.format("The user \"%s\" does not exist!", userName));
+			super(String.format("The user \"%s\" does not exist!", username));
 		}
 	}
 
 	/**
-	 * If an username is already in the database.
+	 * If {@code username} is already in the database.
 	 */
-	public static class UserNameAlreadyExistException extends Exception
+	public static class UsernameAlreadyExistException extends Exception
 	{
-		public UserNameAlreadyExistException(String userName)
+		public UsernameAlreadyExistException(String username)
 		{
-			super(String.format("The user \"%s\" already exists! Please choose another name!", userName));
+			super(String.format("The user \"%s\" already exists! Please choose another name!", username));
 		}
 	}
 
 	/**
-	 * When passwords do not match up
+	 * When passwords do not match up.
 	 */
 	public static class AccessDeniedException extends Exception
 	{
@@ -53,7 +53,7 @@ public abstract class AppExceptions
 	}
 
 	/**
-	 * If the calendar is inexistent.
+	 * If the {@code user} has no calendar with such a name.
 	 */
 	public static class UnknownCalendarException extends Exception
 	{

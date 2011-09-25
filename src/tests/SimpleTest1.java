@@ -42,7 +42,7 @@ public class SimpleTest1
 	}
 
 	@Given("simpleTest1")
-	public App userAlphaNameShouldBeAlpha(App app) throws UserNameAlreadyExistException
+	public App userAlphaNameShouldBeAlpha(App app) throws UsernameAlreadyExistException
 	{
 		this.userAlpha = app.createUser("Alpha", "123");
 		assertEquals(userAlpha.getName(), "Alpha");
@@ -56,9 +56,9 @@ public class SimpleTest1
 		try
 		{
 			fakeUser = app.createUser("Alpha", "456");
-			fail("UserNameAlreadyExistException expected!");
+			fail("UsernameAlreadyExistException expected!");
 		}
-		catch (UserNameAlreadyExistException e)
+		catch (UsernameAlreadyExistException e)
 		{
 			assertNotNull(e);
 		}
@@ -178,7 +178,7 @@ public class SimpleTest1
 		{
 			app.deleteUser("Alpha", "123");
 			ghostUser = app.loginUser("Alpha", "123");
-			fail("AccessDeniedException expected!");
+			fail("UnknownUserException expected!");
 		}
 		catch (UnknownUserException e)
 		{
@@ -189,7 +189,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePrivate")
-	public App userBetaShouldNotAccessForeignUserAcount(App app) throws UserNameAlreadyExistException
+	public App userBetaShouldNotAccessForeignUserAcount(App app) throws UsernameAlreadyExistException
 	{
 		this.userBeta = app.createUser("Beta", "abc");
 		User hackedAccount = null;
@@ -287,9 +287,7 @@ public class SimpleTest1
 		return app;
 	}
 
-	///////////////////
-	//PRIVATE METHODS//
-	///////////////////
+	/* Private methods */
 	
 	private Date stringParseToDate(String strDate)
 	{
