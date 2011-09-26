@@ -3,11 +3,13 @@
  */
 package tests;
 
+import interfaces.IEvent;
+import interfaces.IUser;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import org.junit.*;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
@@ -26,14 +28,15 @@ import app.AppExceptions.*;
 @RunWith(JExample.class)
 public class SimpleTest2
 {
-	private User userAlpha;
+	private IUser userAlpha;
 	private Calendar calendarAlpha;
 
 	@Test
-	public App oneUserTest() throws UsernameAlreadyExistException
+	public App oneUserTest() throws UsernameAlreadyExistException, UnknownUserException, AccessDeniedException
 	{
 		App app = new App();
-		this.userAlpha = app.createUser("Alpha", "123");
+		app.createUser("Alpha", "123");
+		this.userAlpha= app.loginUser("Alpha", "123");
 		return app;
 	}
 
@@ -52,9 +55,10 @@ public class SimpleTest2
 	}
 
 	@Given("userAlphaShouldHaveNoCalendars")
-	public App alphaCalendarNameShouldBeCalendarAlpha(App app)
+	public App alphaCalendarNameShouldBeCalendarAlpha(App app) throws UnknownCalendarException
 	{
-		this.calendarAlpha = this.userAlpha.createNewCalendar("CalendarAlpha");
+		this.userAlpha.createNewCalendar("CalendarAlpha");
+		this.calendarAlpha=this.userAlpha.getCalendar("CalendarAlpha");
 		assertEquals(calendarAlpha.getName(), "CalendarAlpha");
 		return app;
 	}
@@ -67,9 +71,10 @@ public class SimpleTest2
 	}
 
 	@Given("alphaCalendarOwnerShouldBeUserAlpha")
-	public App alphaCalendarShouldBeEmpty(App app) throws AccessDeniedException
+	public App alphaCalendarShouldBeEmpty(App app) throws AccessDeniedException, UnknownCalendarException
 	{
-		assertTrue(this.calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970"), this.userAlpha).isEmpty());
+		ArrayList<IEvent> allEvents=this.userAlpha.getAllEventsDate("CalendarAlpha",this.stringParseToDate("1.1.1970")); 
+		assertTrue(allEvents.isEmpty());
 		return app;
 	}
 
@@ -81,10 +86,12 @@ public class SimpleTest2
 	}
 
 	@Given("alphaCalendarShouldBeEmpty")
-	public App eventNameShouldBeParty(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException
+	public App eventNameShouldBeParty(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException
 	{
-		calendarAlpha.createPrivateEvent("Party", this.stringParseToDate("22.09.2011"), this.stringParseToDate("29.09.2011"), this.userAlpha);
-		assertFalse(calendarAlpha.getAllEventsDate(new Date(), this.userAlpha).isEmpty());
+		
+		this.userAlpha.createPrivateEvent("CalendarAlpha", "Party", this.stringParseToDate("22.09.2011"),  this.stringParseToDate("29.09.2011"));
+		
+		assertFalse(calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970")).isEmpty());
 		Event eventParty = calendarAlpha.getEvent("Party", this.stringParseToDate("22.09.2011"));
 		assertEquals(eventParty.getEventName(), "Party");
 		return app;
@@ -107,32 +114,32 @@ public class SimpleTest2
 	}
 
 	@Given("alphaCalendarShouldBeEmpty")
-	public App startDateShouldNotBeAfterEndDate(App app) throws AccessDeniedException
+	public App startDateShouldNotBeAfterEndDate(App app) throws AccessDeniedException, UnknownCalendarException
 	{
 		try
 		{
-			calendarAlpha.createPrivateEvent("BackToTheFutureEvent", this.stringParseToDate("23.09.2011"), this.stringParseToDate("22.09.2011"), this.userAlpha);
+			this.userAlpha.createPrivateEvent("CalendarAlpha","BackToTheFutureEvent", this.stringParseToDate("23.09.2011"), this.stringParseToDate("22.09.2011"));
 			fail("InvalidDateException expected!");
 		}
 		catch(InvalidDateException e)
 		{
 			assertNotNull(e);
 		}
-		assertTrue(calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970"), this.userAlpha).isEmpty());
+		assertTrue(calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970")).isEmpty());
 		return app;
 	}
 
 	@Given("userAlphaShouldHaveOneCalendar")
-	public App deleteEventsTest(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException
+	public App deleteEventsTest(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException
 	{
-		calendarAlpha.createPrivateEvent("My Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"), this.userAlpha);
-		calendarAlpha.createPublicEvent("Our Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"), this.userAlpha);
+		this.userAlpha.createPrivateEvent("CalendarAlpha", "My Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"));
+		this.userAlpha.createPublicEvent("CalendarAlpha", "Our Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"));
 
 		calendarAlpha.deleteEvent("My Event", this.stringParseToDate("23.09.2011"));
 		calendarAlpha.deleteEvent("Our Event", this.stringParseToDate("23.09.2011"));
 
 		// alphaCalendarShouldBeEmpty
-		assertTrue(calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970"), this.userAlpha).isEmpty());
+		assertTrue(calendarAlpha.getAllEventsDate(this.stringParseToDate("1.1.1970")).isEmpty());
 
 		return app;
 	}
@@ -145,20 +152,26 @@ public class SimpleTest2
 	}
 
 	@Given("userAlphaShouldHaveNoCalendars")
-	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException
+	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException, UnknownCalendarException
 	{
-		Calendar newCalendar = this.userAlpha.createNewCalendar("New calendar");
-		newCalendar.createPrivateEvent("Private Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"), this.userAlpha);
-		newCalendar.createPublicEvent("Public Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"), this.userAlpha);
+		this.userAlpha.createNewCalendar("New calendar");
+		
+		this.userAlpha.createPrivateEvent("New calendar", "Private Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"));
+		this.userAlpha.createPublicEvent("New calendar", "Public Event",this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"));
 
-		Calendar secondCalendar = this.userAlpha.createNewCalendar("Second Calendar");
-		secondCalendar.createPrivateEvent("Private Event", this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"), this.userAlpha);
-		secondCalendar.createPublicEvent("Public Event", this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"), this.userAlpha);
+		
+		this.userAlpha.createNewCalendar("Second Calendar");
+		
+		this.userAlpha.createPrivateEvent("Second Calendar", "Private Event",this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"));
+		this.userAlpha.createPublicEvent("Second Calendar", "Public Event",this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"));
+		
 
-		Calendar otherCalendar = this.userAlpha.createNewCalendar("Other calendar");
-		otherCalendar.createPrivateEvent("Private Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
-		otherCalendar.createPublicEvent("Public Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
+		this.userAlpha.createNewCalendar("Other calendar");
+		
+		this.userAlpha.createPrivateEvent("Other calendar", "Private Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"));
+		this.userAlpha.createPrivateEvent("Other calendar", "Public Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"));
 
+		
 		ArrayList<String> AlphasCalendarListViaUser = userAlpha.getAllMyCalendarNames();
 		ArrayList<String> AlphasCalendarListViaApp = app.getAllCalendarsNamesFromUser("Alpha");
 		assertEquals(AlphasCalendarListViaUser, AlphasCalendarListViaApp);

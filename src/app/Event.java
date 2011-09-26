@@ -2,6 +2,8 @@
  * Calendar framework
  */
 package app;
+import interfaces.IEvent;
+
 import java.util.Date;
 import app.AppExceptions.*;
 
@@ -11,19 +13,13 @@ import app.AppExceptions.*;
  *
  */
 
-public class Event
+public class Event implements IEvent
 {
-	private enum State
-	{
-	 PUBLIC,
-	 PRIVATE
-	}
-
 	private String eventName;
 	private Date startDate;
 	private Date endDate;
-	private State visibility;
-
+	private boolean isPrivate;
+	
 	/**
 	 * Constructor for specific event with the state 'private'
 	 * @param eventName A precise name / description for the event
@@ -41,37 +37,46 @@ public class Event
 		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.visibility = State.PRIVATE;
+		this.isPrivate = true;
 	}
-
-	/* Getters */
-
-	public String getEventName()
+	
+	///////////
+	//GETTERS//
+	///////////
+	
+	@Override
+	public String getEventName() 
 	{
 		return this.eventName;
 	}
-	
-	public Date getStartDate()
+
+	@Override
+	public Date getStartDate() 
 	{
 		return this.startDate;
 	}
 
-	public Date getEndDate()
+	@Override
+	public Date getEndDate() 
 	{
 		return this.endDate;
 	}
 
-	public boolean isPrivate()
+	@Override
+	public boolean isPrivate() 
 	{
-		return (this.visibility == State.PRIVATE);
+		return this.isPrivate;
 	}
 
-	public boolean isPublic()
+	@Override
+	public boolean isPublic() 
 	{
-		return (this.visibility == State.PUBLIC);
+		return !this.isPrivate;
 	}
 
-	/* Setters*/
+	///////////
+	//SETTERS//
+	///////////
 
 	public void setEventName(String name)
 	{
@@ -90,11 +95,11 @@ public class Event
 
 	public void setStatePublic()
 	{
-		this.visibility = State.PUBLIC;
+		this.isPrivate=false;
 	}
 
 	public void setStatePrivate()
 	{
-		this.visibility = State.PRIVATE;
+		this.isPrivate=true;
 	}
 }
