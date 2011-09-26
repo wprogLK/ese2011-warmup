@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import app.AppExceptions.InvalidDateException;
 import app.AppExceptions.UnknownCalendarException;
 import app.AppExceptions.*;
 
@@ -115,39 +116,45 @@ public class User implements IUser
 	}
 
 	@Override
-	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException 
+	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.editEvent(eventName, startDate, newEventName, null, null, null);
 	}
 
 	@Override
-	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException 
+	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.editEvent(eventName, startDate, null, newStartDate, null, null);
 	}
 
 	@Override
-	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException 
+	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.editEvent(eventName, startDate, null, null, newEndDate, null);
 	}
 
 	@Override
-	public void editEventStateToPublic(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException 
+	public void editEventStateToPublic(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.editEvent(eventName, startDate, null, null, null, false);
 	}
 
 	@Override
-	public void editEventStateToPrivate(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException 
+	public void editEventStateToPrivate(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.editEvent(eventName, startDate, null, null, null, true);
 	}
 
 	@Override
-	public void deleteEvent(String calendarName, String eventName,Date startDate) throws AccessDeniedException, UnknownEventException 
+	public void deleteEvent(String calendarName, String eventName,Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException 
 	{
-		//TODO
+		Calendar calendar = this.getCalendar(calendarName);
+		calendar.deleteEvent(eventName, startDate);
 	}
 
 	//////////////

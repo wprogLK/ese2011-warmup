@@ -6,9 +6,7 @@ package tests;
 import interfaces.*;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.junit.*;
@@ -16,10 +14,9 @@ import org.junit.runner.RunWith;
 
 import app.App;
 import app.AppExceptions.*;
-import app.AppExceptions.UnknownUserException;
+import app.AppExceptions;
 import app.Calendar;
 import app.Event;
-import app.User;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
 
@@ -31,7 +28,7 @@ import static org.junit.Assert.*;
 
 //FIXME: Rename SimpleTest1 to something like User-specific Tests
 @RunWith(JExample.class)
-public class SimpleTest1
+public class SimpleTest1 extends TestTemplate
 {
 
 	IUser userAlpha;
@@ -42,6 +39,15 @@ public class SimpleTest1
 	{
 		App app = new App();
 		return app;
+	}
+	
+	@Test
+	/**
+	 * Only for a better coverage ;-)
+	 */
+	public void createAppExceptionsClass()
+	{
+		new AppExceptions();
 	}
 
 	@Given("simpleTest1")
@@ -98,7 +104,7 @@ public class SimpleTest1
 	}
 
 	@Given("userAlphaNameShouldBeAlpha")
-	public App shouldNotRetrieveCalendarOrEventsFromFictitiousUser(App app) throws UnknownCalendarException, AccessDeniedException
+	public App shouldNotRetrieveCalendarOrEventsFromFictitiousUser(App app) throws UnknownCalendarException, AccessDeniedException, ParseException
 	{
 		ArrayList<String> fictiousCalendarNames = null;
 
@@ -151,7 +157,7 @@ public class SimpleTest1
 	}
 
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public App deleteCalendarFromUserAlpha(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
+	public App deleteCalendarFromUserAlpha(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, ParseException
 	{
 		userAlpha.createNewCalendar("Short-living calendar");
 		userAlpha.createPrivateEvent("Short-living calendar", "My private event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
@@ -174,7 +180,7 @@ public class SimpleTest1
 	}
 
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public App eventShouldBePrivate (App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, UnknownEventException
+	public App eventShouldBePrivate (App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, UnknownEventException, ParseException
 	{
 		this.userAlpha.createPrivateEvent("My calendar", "My private event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
 		
@@ -185,7 +191,7 @@ public class SimpleTest1
 	}
 
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public App eventShouldBePublic(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, UnknownEventException
+	public App eventShouldBePublic(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, UnknownEventException, ParseException
 	{
 		this.userAlpha.createPublicEvent("My calendar", "My public event", this.stringParseToDate("23.01.2011"), this.stringParseToDate("23.08.2011"));
 		
@@ -244,7 +250,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePublic")
-	public App userBetaShouldSeePublicEventsFromForeignCalendar(App app) throws UnknownUserException, UnknownCalendarException, AccessDeniedException
+	public App userBetaShouldSeePublicEventsFromForeignCalendar(App app) throws UnknownUserException, UnknownCalendarException, AccessDeniedException, ParseException
 	{
 		Iterator<IEvent> iteratorPublicEvents = app.getUsersCalendarPublicEvents("Alpha", "My calendar", this.stringParseToDate("22.01.2011"));
 		
@@ -281,7 +287,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePrivate")
-	public App invalidEventStringButValidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
+	public App invalidEventStringButValidDateTest(App app) throws UnknownCalendarException, AccessDeniedException, ParseException
 	{
 		Calendar calendarAlpha = userAlpha.getCalendar("My calendar");
 		Event unrealEvent = null;
@@ -299,7 +305,7 @@ public class SimpleTest1
 	}
 
 	@Given("eventShouldBePrivate")
-	public App validEventStringButInvalidDateTest(App app) throws UnknownCalendarException, AccessDeniedException
+	public App validEventStringButInvalidDateTest(App app) throws UnknownCalendarException, AccessDeniedException, ParseException
 	{
 		Calendar calendarAlpha = userAlpha.getCalendar("My calendar");
 		Event phantomEvent = null;
@@ -316,20 +322,5 @@ public class SimpleTest1
 		return app;
 	}
 
-	/* Private methods */
-	
-	private Date stringParseToDate(String strDate)
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-		try
-		{
-			return sdf.parse(strDate);
-		}
-		catch (ParseException e)
-		{
-			e.printStackTrace();
-			return null;
-		}
-	}
 }

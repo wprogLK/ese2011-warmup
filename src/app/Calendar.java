@@ -7,9 +7,11 @@ import interfaces.ICalendar;
 import interfaces.IEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 
+import app.AppExceptions.InvalidDateException;
 import app.AppExceptions.*;
 
 /**
@@ -79,7 +81,7 @@ public class Calendar implements ICalendar
 	public Event createPublicEvent(String name, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException
 	{
 		Event newEvent = new Event(name, startDate, endDate);
-		newEvent.setStatePublic();
+		newEvent.setPrivateVisibility(false);
 		this.publicEvents.add(newEvent);
 		return newEvent;
 	}
@@ -102,7 +104,7 @@ public class Calendar implements ICalendar
 		eventList.addAll(this.privateEvents);
 		eventList.addAll(this.publicEvents);
 		eventList = this.getEventsWithStartDateOrMore(startDate, eventList);
-//		this.sortEvents(eventList);
+		this.sortEvents(eventList);
 		return eventList.iterator();
 	}
 
@@ -120,7 +122,7 @@ public class Calendar implements ICalendar
 		ArrayList<IEvent> eventList = new ArrayList<IEvent>();
 		eventList.addAll(this.privateEvents);
 		eventList.addAll(this.publicEvents);
-//		this.sortEvents(eventList);
+		this.sortEvents(eventList);
 		return this.getEventsWithDate(date, eventList);
 	}
 	
@@ -150,30 +152,30 @@ public class Calendar implements ICalendar
 
 	/* Functions used to modify events */
 
-	//TODO: Write tests
-	public void editEventName(String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException
+	
+	public void editEvent(String eventName, Date startDate, String newEventName, Date newStartDate, Date newEndDate, Boolean newPrivateVisible) throws AccessDeniedException, UnknownEventException, InvalidDateException
 	{
-		this.getEvent(eventName, startDate).setEventName(newEventName);
-	}	
-
-	public void editEventStartDate(String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException
-	{
-		this.getEvent(eventName, startDate).setStartDate(newStartDate);
-	}	
-
-	public void editEventEndDate(String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException
-	{
-		this.getEvent(eventName, startDate).setStartDate(newEndDate);
-	}	
-
-	public void editEventStateToPublic(String eventName, Date startDate) throws AccessDeniedException, UnknownEventException
-	{
-		this.getEvent(eventName, startDate).setStatePublic();
-	}	
-
-	public void editEventStateToPrivate(String eventName, Date startDate) throws AccessDeniedException, UnknownEventException
-	{
-		this.getEvent(eventName, startDate).setStatePrivate();
+		Event e=this.getEvent(eventName, startDate);
+		
+		if(newEventName!=null)
+		{
+			e.setEventName(newEventName);
+		}
+		
+		if(newStartDate!=null)
+		{
+			e.setStartDate(newStartDate);
+		}
+		
+		if(newEndDate!=null)
+		{
+			e.setEndDate(newEndDate);
+		}
+		
+		if(newPrivateVisible!=null)
+		{
+			e.setPrivateVisibility(newPrivateVisible);
+		}
 	}	
 
 	/* Private methods */
@@ -206,12 +208,20 @@ public class Calendar implements ICalendar
 		return output;
 	}
 
-//	private ArrayList<Event> sortEvents(ArrayList<Event> inputList)
-//	{
-//		ArrayList<Event> output = new ArrayList<Event>();
-//		//TODO: TEST THIS!
-//		return output;
-//	}
+	private void sortEvents(ArrayList<IEvent> inputList)
+	{
+		IEvent[] arrayOfEvents = new IEvent[inputList.size()];
+		inputList.toArray(arrayOfEvents);
+		
+		Arrays.sort(arrayOfEvents);
+		
+		inputList.clear();
+		
+		for(IEvent e: arrayOfEvents)
+		{
+			inputList.add(e);
+		}
+	}
 
 
 	/** Deletes the event from the calendar.

@@ -11,7 +11,7 @@ import java.util.Date;
  *
  */
 
-public abstract class AppExceptions
+public class AppExceptions
 {
 
 	/**
@@ -41,11 +41,6 @@ public abstract class AppExceptions
 	 */
 	public static class AccessDeniedException extends Exception
 	{
-		public AccessDeniedException(Calendar calendar)
-		{
-			super(String.format("User \"%s\" did not give you permission to create, edit or delete events in the calendar \"%s\"!", calendar.getOwner().getName(), calendar.getName()));
-		}
-
 		public AccessDeniedException(String username)
 		{
 			super(String.format("You provided user \"%s\" with an invalid password!", username));

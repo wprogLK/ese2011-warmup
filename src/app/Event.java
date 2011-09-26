@@ -5,7 +5,8 @@ package app;
 import interfaces.IEvent;
 
 import java.util.Date;
-import app.AppExceptions.*;
+
+import app.AppExceptions.InvalidDateException;
 
 /**
  * @author Lukas Keller
@@ -13,7 +14,7 @@ import app.AppExceptions.*;
  *
  */
 
-public class Event implements IEvent
+public class Event implements IEvent, Comparable<Event>
 {
 	private String eventName;
 	private Date startDate;
@@ -29,10 +30,10 @@ public class Event implements IEvent
 	 */
 	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
-		if (startDate.after(endDate))
-		{
-			throw new InvalidDateException(startDate, endDate);
-		}
+		
+		checkValidDates(startDate, endDate);
+		
+		
 
 		this.eventName = eventName;
 		this.startDate = startDate;
@@ -40,6 +41,15 @@ public class Event implements IEvent
 		this.isPrivate = true;
 	}
 	
+	private void checkValidDates(Date startDate,Date endDate) throws InvalidDateException 
+	{
+		if (startDate.after(endDate))
+		{
+			throw new InvalidDateException(startDate, endDate);
+		}
+		
+	}
+
 	///////////
 	//GETTERS//
 	///////////
@@ -83,23 +93,44 @@ public class Event implements IEvent
 		this.eventName = name;
 	}
 
-	public void setStartDate(Date startDate)
+	public void setStartDate(Date startDate) throws InvalidDateException
 	{
+		checkValidDates(startDate, this.endDate);
+		
 		this.startDate = startDate;
 	}
 
-	public void setEndDate(Date endDate)
+	public void setEndDate(Date endDate) throws InvalidDateException
 	{
+		checkValidDates(this.startDate, endDate);
+		
 		this.endDate = endDate;
 	}
 
-	public void setStatePublic()
+	public void setPrivateVisibility(boolean value)
 	{
-		this.isPrivate=false;
+		this.isPrivate=value;
 	}
-
-	public void setStatePrivate()
+	
+	///////////
+	//COMPARE//
+	///////////
+	
+	@Override
+	public int compareTo(Event eventToCompare) 
 	{
-		this.isPrivate=true;
+		if(this.startDate.before(eventToCompare.getStartDate()))
+		{
+			return -1;
+		}
+		else if(this.startDate.after(eventToCompare.getStartDate()))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
+	
 }
