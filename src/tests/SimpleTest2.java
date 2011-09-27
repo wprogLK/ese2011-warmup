@@ -7,7 +7,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import org.junit.*;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
@@ -52,7 +51,7 @@ public class SimpleTest2
 	}
 
 	@Given("userAlphaShouldHaveNoCalendars")
-	public App alphaCalendarNameShouldBeCalendarAlpha(App app)
+	public App alphaCalendarNameShouldBeCalendarAlpha(App app) throws CalendarIsNotUniqueException
 	{
 		this.calendarAlpha = this.userAlpha.createNewCalendar("CalendarAlpha");
 		assertEquals(calendarAlpha.getName(), "CalendarAlpha");
@@ -144,8 +143,25 @@ public class SimpleTest2
 		return app;
 	}
 
+	@Given("alphaCalendarOwnerShouldBeUserAlpha")
+	public App caledarNameShouldBeUnique(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
+	{
+		Calendar calendarAlphaMirror = null;
+		try
+		{
+			calendarAlphaMirror = this.userAlpha.createNewCalendar("CalendarAlpha");
+			fail("CalendarIsNotUniqueException expected!");
+		}
+		catch (CalendarIsNotUniqueException e)
+		{
+			assertNotNull(e);
+		}
+		assertNull(calendarAlphaMirror);
+		return app;
+	}
+
 	@Given("userAlphaShouldHaveNoCalendars")
-	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException
+	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException, CalendarIsNotUniqueException
 	{
 		Calendar newCalendar = this.userAlpha.createNewCalendar("New calendar");
 		newCalendar.createPrivateEvent("Private Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"), this.userAlpha);

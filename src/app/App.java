@@ -30,7 +30,6 @@ public class App
 	 * @param username The name the new user should have.
 	 * @param password A string consisting of a random set of characters kept secret to make the access unique to the user.
 	 * No quality checking is done at this point.
-	 * @param app 
 	 * @return The newly created {@link User}. It is needed to have read and write access to calendars.
 	 * @throws UsernameAlreadyExistException 
 	 */

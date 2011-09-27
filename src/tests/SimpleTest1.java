@@ -125,7 +125,7 @@ public class SimpleTest1
 	}
 
 	@Given("userAlphaNameShouldBeAlpha")
-	public App calendarOwnerShouldBeUserAlpha(App app)
+	public App calendarOwnerShouldBeUserAlpha(App app) throws CalendarIsNotUniqueException
 	{
 		Calendar myCalendar = userAlpha.createNewCalendar("My calendar");
 		assertEquals(myCalendar.getOwner(), userAlpha);
@@ -133,7 +133,7 @@ public class SimpleTest1
 	}
 
 	@Given("calendarOwnerShouldBeUserAlpha")
-	public App deleteCalendarFromUserAlpha(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException
+	public App deleteCalendarFromUserAlpha(App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, CalendarIsNotUniqueException
 	{
 		userAlpha.createNewCalendar("Short-living calendar");
 		userAlpha.createPrivateEvent("Short-living calendar", "My private event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
@@ -231,6 +231,9 @@ public class SimpleTest1
 		assertEquals(1, i);
 
 		ArrayList<Event> arrayListPublicEvents = app.getUsersCalendarPublicEventsOverview("Alpha", "My calendar", this.stringParseToDate("22.01.2011"));
+		assertEquals("My public event", arrayListPublicEvents.get(0).getEventName());
+		assertEquals(this.stringParseToDate("23.01.2011"), arrayListPublicEvents.get(0).getStartDate());
+		assertEquals(this.stringParseToDate("23.08.2011"), arrayListPublicEvents.get(0).getEndDate());
 		assertEquals(1, arrayListPublicEvents.size());
 		return app;
 	}

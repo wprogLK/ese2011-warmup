@@ -15,6 +15,8 @@ import app.AppExceptions.*;
  *
  */
 
+/** User object that represents an user.
+ */
 public class User
 {
 	private ArrayList<Calendar> calendars;
@@ -37,15 +39,29 @@ public class User
 
 	/* Operations on calendars */
 
-	/** Cretes a new {@link Calendar} for the specified user.
-	 * @param nameOfCalendar The title of the calendar to be created.
+	/** Creates a new {@link Calendar} for the specified user.
+	 * @param nameOfCalendar The title of the calendar to be created. The name must be unique.
 	 * @return The created calendar.
-	 * */
-	public Calendar createNewCalendar(String nameOfCalendar)
+	 * @throws CalendarIsNotUniqueException 
+	 */
+	public Calendar createNewCalendar(String nameOfCalendar) throws CalendarIsNotUniqueException
 	{
+		isCalendarnameUnique(nameOfCalendar);
+
 		Calendar newCalendar = new Calendar(this, nameOfCalendar);
 		this.calendars.add(newCalendar);
 		return newCalendar;
+	}
+
+	private void isCalendarnameUnique(String nameOfCalendar) throws CalendarIsNotUniqueException
+	{
+		for (Calendar c : this.calendars)
+		{
+			if (c.getName().equals(nameOfCalendar))
+			{
+				throw new CalendarIsNotUniqueException(c);
+			}
+		}
 	}
 
 	/** Removes the calendar including all events in it from the user.
