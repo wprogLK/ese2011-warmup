@@ -7,7 +7,9 @@ import interfaces.IEvent;
 import interfaces.IUser;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import org.junit.*;
 import ch.unibe.jexample.*;
 import static org.junit.Assert.*;
@@ -24,7 +26,7 @@ import app.AppExceptions.*;
 
 //FIXME: Rename SimpleTest2 to something like Calendar-specific tests
 @RunWith(JExample.class)
-public class SimpleTest2 extends TestTemplate
+public class SimpleTest2
 {
 	private IUser userAlpha;
 	private Calendar calendarAlpha;
@@ -69,7 +71,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("alphaCalendarOwnerShouldBeUserAlpha")
-	public App alphaCalendarShouldBeEmpty(App app) throws AccessDeniedException, UnknownCalendarException, ParseException
+	public App alphaCalendarShouldBeEmpty(App app) throws AccessDeniedException, UnknownCalendarException
 	{
 		ArrayList<IEvent> allEvents=this.userAlpha.getAllEventsDate("CalendarAlpha",this.stringParseToDate("1.1.1970")); 
 		assertTrue(allEvents.isEmpty());
@@ -84,7 +86,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("alphaCalendarShouldBeEmpty")
-	public App eventNameShouldBeParty(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException, ParseException
+	public App eventNameShouldBeParty(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException
 	{
 		
 		this.userAlpha.createPrivateEvent("CalendarAlpha", "Party", this.stringParseToDate("22.09.2011"),  this.stringParseToDate("29.09.2011"));
@@ -96,7 +98,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("eventNameShouldBeParty")
-	public App eventStartDateShouldBe22_09_2011(App app) throws AccessDeniedException, UnknownEventException, ParseException
+	public App eventStartDateShouldBe22_09_2011(App app) throws AccessDeniedException, UnknownEventException
 	{
 		Event eventParty = calendarAlpha.getEvent("Party", this.stringParseToDate("22.09.2011"));
 		assertEquals(eventParty.getStartDate(), this.stringParseToDate("22.09.2011"));
@@ -104,7 +106,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("eventStartDateShouldBe22_09_2011")
-	public App eventEndDateShouldBe29_09_2011(App app) throws AccessDeniedException, UnknownEventException, ParseException
+	public App eventEndDateShouldBe29_09_2011(App app) throws AccessDeniedException, UnknownEventException
 	{
 		Event eventParty = calendarAlpha.getEvent("Party", this.stringParseToDate("22.09.2011"));
 		assertEquals(eventParty.getEndDate(), this.stringParseToDate("29.09.2011"));
@@ -112,7 +114,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("alphaCalendarShouldBeEmpty")
-	public App startDateShouldNotBeAfterEndDate(App app) throws AccessDeniedException, UnknownCalendarException, ParseException
+	public App startDateShouldNotBeAfterEndDate(App app) throws AccessDeniedException, UnknownCalendarException
 	{
 		try
 		{
@@ -128,7 +130,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("userAlphaShouldHaveOneCalendar")
-	public App deleteEventsTest(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException, ParseException
+	public App deleteEventsTest(App app) throws AccessDeniedException, UnknownEventException, InvalidDateException, UnknownCalendarException
 	{
 		this.userAlpha.createPrivateEvent("CalendarAlpha", "My Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"));
 		this.userAlpha.createPublicEvent("CalendarAlpha", "Our Event", this.stringParseToDate("23.09.2011"), this.stringParseToDate("23.09.2011"));
@@ -150,7 +152,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("userAlphaShouldHaveNoCalendars")
-	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException, UnknownCalendarException, ParseException
+	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException, UnknownCalendarException
 	{
 		this.userAlpha.createNewCalendar("New calendar");
 		
@@ -184,5 +186,19 @@ public class SimpleTest2 extends TestTemplate
 		assertEquals("Other calendar", AlphasCalendarListViaApp.get(2));
 
 		return app;
+	}
+
+	private Date stringParseToDate(String strDate)
+	{
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		try
+		{
+			return sdf.parse(strDate);
+		}
+		catch (ParseException e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
