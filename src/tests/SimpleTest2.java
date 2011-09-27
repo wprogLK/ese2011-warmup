@@ -159,18 +159,18 @@ public class SimpleTest2
 		otherCalendar.createPrivateEvent("Private Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
 		otherCalendar.createPublicEvent("Public Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
 
-		ArrayList<String> AlphasCalendarListViaUser = userAlpha.getAllMyCalendarNames();
-		ArrayList<String> AlphasCalendarListViaApp = app.getAllCalendarsNamesFromUser("Alpha");
-		assertEquals(AlphasCalendarListViaUser, AlphasCalendarListViaApp);
+		ArrayList<String> alphasCalendarListViaUser = userAlpha.getAllMyCalendarNames();
+		ArrayList<String> alphasCalendarListViaApp = app.getAllCalendarsNamesFromUser("Alpha");
+		assertEquals(alphasCalendarListViaUser, alphasCalendarListViaApp);
 
-		assertEquals(3, AlphasCalendarListViaUser.size());
-		assertEquals(3, AlphasCalendarListViaApp.size());
-		assertEquals("New calendar", AlphasCalendarListViaUser.get(0));
-		assertEquals("New calendar", AlphasCalendarListViaApp.get(0));
-		assertEquals("Second Calendar", AlphasCalendarListViaUser.get(1));
-		assertEquals("Second Calendar", AlphasCalendarListViaApp.get(1));
-		assertEquals("Other calendar", AlphasCalendarListViaUser.get(2));
-		assertEquals("Other calendar", AlphasCalendarListViaApp.get(2));
+		assertEquals(3, alphasCalendarListViaUser.size());
+		assertEquals(3, alphasCalendarListViaApp.size());
+		assertEquals("New calendar", alphasCalendarListViaUser.get(0));
+		assertEquals("New calendar", alphasCalendarListViaApp.get(0));
+		assertEquals("Second Calendar", alphasCalendarListViaUser.get(1));
+		assertEquals("Second Calendar", alphasCalendarListViaApp.get(1));
+		assertEquals("Other calendar", alphasCalendarListViaUser.get(2));
+		assertEquals("Other calendar", alphasCalendarListViaApp.get(2));
 
 		return app;
 	}
