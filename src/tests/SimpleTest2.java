@@ -154,6 +154,31 @@ public class SimpleTest2
 	@Given("userAlphaShouldHaveNoCalendars")
 	public App shouldGiveCalendarListOfUserAlphaTest(App app) throws AccessDeniedException, InvalidDateException, UnknownUserException, UnknownCalendarException
 	{
+		Calendar newCalendar = this.userAlpha.createNewCalendar("New calendar");
+		newCalendar.createPrivateEvent("Private Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"), this.userAlpha);
+		newCalendar.createPublicEvent("Public Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"), this.userAlpha);
+
+		Calendar secondCalendar = this.userAlpha.createNewCalendar("Second Calendar");
+		secondCalendar.createPrivateEvent("Private Event", this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"), this.userAlpha);
+		secondCalendar.createPublicEvent("Public Event", this.stringParseToDate("22.9.2011"), this.stringParseToDate("22.9.2011"), this.userAlpha);
+
+		Calendar otherCalendar = this.userAlpha.createNewCalendar("Other calendar");
+		otherCalendar.createPrivateEvent("Private Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
+		otherCalendar.createPublicEvent("Public Event", this.stringParseToDate("23.9.2011"), this.stringParseToDate("23.9.2011"), this.userAlpha);
+
+		ArrayList<String> alphasCalendarListViaUser = userAlpha.getAllMyCalendarNames();
+		ArrayList<String> alphasCalendarListViaApp = app.getAllCalendarsNamesFromUser("Alpha");
+		assertEquals(alphasCalendarListViaUser, alphasCalendarListViaApp);
+
+		assertEquals(3, alphasCalendarListViaUser.size());
+		assertEquals(3, alphasCalendarListViaApp.size());
+		assertEquals("New calendar", alphasCalendarListViaUser.get(0));
+		assertEquals("New calendar", alphasCalendarListViaApp.get(0));
+		assertEquals("Second Calendar", alphasCalendarListViaUser.get(1));
+		assertEquals("Second Calendar", alphasCalendarListViaApp.get(1));
+		assertEquals("Other calendar", alphasCalendarListViaUser.get(2));
+		assertEquals("Other calendar", alphasCalendarListViaApp.get(2));
+
 		this.userAlpha.createNewCalendar("New calendar");
 		
 		this.userAlpha.createPrivateEvent("New calendar", "Private Event", this.stringParseToDate("21.9.2011"), this.stringParseToDate("21.9.2011"));
