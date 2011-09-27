@@ -9,6 +9,11 @@ import java.util.Iterator;
 import app.Authentication;
 import app.AppExceptions.*;
 
+/**
+ * @author Lukas Keller
+ * @author Renato Corti
+ *
+ */
 public interface IApp
 {
 		/* Functions for the user management */

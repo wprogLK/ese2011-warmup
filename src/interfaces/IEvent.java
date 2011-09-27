@@ -5,10 +5,15 @@ package interfaces;
 
 import java.util.Date;
 
-public interface IEvent 
+/**
+ * @author Lukas Keller
+ * @author Renato Corti
+ *
+ */
+public interface IEvent
 {
 	public String getEventName();
-	
+
 	public Date getStartDate();
 
 	public Date getEndDate();

@@ -14,8 +14,7 @@ import app.AppExceptions.*;
  *
  */
 
-/**
- * Handles the user database with the corresponding passwords and functions to alter or
+/** Handles the user database with the corresponding passwords and functions to alter or
  * access the {@link User} objects used for read-write access to calendars and events.
  */
 public class Authentication

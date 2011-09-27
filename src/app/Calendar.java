@@ -42,13 +42,13 @@ public class Calendar implements ICalendar
 	}
 
 	@Override
-	public Iterator<IEvent> getAllPublicEventsStarting(Date startDate)
+	public Iterator<IEvent> getAllPublicEventsStartingFrom(Date startDate)
 	{
 		return this.getEventsWithStartDateOrMore(startDate, this.publicEvents).iterator();
 	}
 
 	@Override
-	public ArrayList<IEvent> getAllPublicEventsDate(Date date)
+	public ArrayList<IEvent> getAllPublicEventsAtDate(Date date)
 	{
 		return this.getEventsWithDate(date, this.publicEvents);
 	}
@@ -103,7 +103,7 @@ public class Calendar implements ICalendar
 	 * @param date Date form which to list all current events.
 	 * @return All matching events as an {@link ArrayList}.
 	 */
-	public ArrayList<IEvent> getAllEventsDate(Date date)
+	public ArrayList<IEvent> getAllEventsAtDate(Date date)
 	{
 		ArrayList<IEvent> eventList = new ArrayList<IEvent>();
 		eventList.addAll(this.privateEvents);

@@ -10,10 +10,17 @@ import java.util.Iterator;
 import app.*;
 import app.AppExceptions.*;
 
-public interface IUser 
+/**
+ * @author Lukas Keller
+ * @author Renato Corti
+ *
+ */
+public interface IUser
 {
-	/* Operations on calendars */
-	
+	/////////////////////////
+	// CALENDAR OPERATIONS //
+	/////////////////////////
+
 	/** Creates a new {@link Calendar} for the specified user.
 	 * @param nameOfCalendar The title of the calendar to be created. The name must be unique.
 	 * @throws CalendarIsNotUniqueException If a {@code calendar} with the same title already exists in the calendar list of the {@code user}.
@@ -36,18 +43,33 @@ public interface IUser
 	 */
 	public boolean hasNoCalendar();
 
-	public ArrayList<IEvent> getMyCalendarAllEventsDate(String calendarName, Date date) throws UnknownCalendarException, AccessDeniedException;
+	/** Provides all (public and private) events at a given {@link Date} from the specified calendar as an {@link ArrayList}.
+	 * @param calendarName Title of the calendar to identify it.
+	 * @param date Date form which to list all events.
+	 * @return All events in the calendar.
+	 * @throws AccessDeniedException When passwords do not match up.
+	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
+	 * @see Authentication#getUser(String, String)
+	 */
+	public ArrayList<IEvent> getMyCalendarAllEventsAtDate(String calendarName, Date date) throws UnknownCalendarException, AccessDeniedException;
 
-	public Iterator<IEvent> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException, AccessDeniedException;
+	/** Provides an {@link Iterator} with all (public and private) events from the specified calendar, that begin at the given date {@code startDate}.
+	 * @param calendarName Title of the calendar to identify it.
+	 * @param startDate Starting point of events.
+	 * @return All events that are set to start at {@code startDate}.
+	 * @throws AccessDeniedException When passwords do not match up.
+	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
+	 */
+	public Iterator<IEvent> getMyCalendarAllEventsStartingFrom(String calendarName, Date startDate) throws UnknownCalendarException, AccessDeniedException;
 
-	public Iterator<IEvent> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException;
+	public Iterator<IEvent> getMyCalendarPublicEventsStartingFrom(String calendarName, Date startDate) throws UnknownCalendarException;
 
-	public ArrayList<IEvent> getMyCalendarPublicEventsDate(String calendarName, Date date) throws UnknownCalendarException;
-	
-	/////////////////
-	//EVENT ACTIONS//
-	/////////////////
-	
+	public ArrayList<IEvent> getMyCalendarPublicEventsAtDate(String calendarName, Date date) throws UnknownCalendarException;
+
+	///////////////////
+	// EVENT ACTIONS //
+	///////////////////
+
 	/** Creates a new private event in the given {@link Calendar}.
 	 * @param calendarName Title of the calendar to identify it.
 	 * @param eventName Title of the event to identify it.
@@ -68,14 +90,14 @@ public interface IUser
 	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
 	 * @throws InvalidDateException If {@code endDate} is placed before {@code startDate}.
 	 */
-	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException, InvalidDateException;
-	
-	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException , InvalidDateException;
+	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException;
 
-	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException , InvalidDateException;
+	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException;
 
-	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException , InvalidDateException;
-	
+	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException;
+
+	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException;
+
 	public void editEventStateToPublic(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException;
 
 	public void editEventStateToPrivate(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException;
@@ -89,35 +111,14 @@ public interface IUser
 	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
 	 */
 	public void deleteEvent(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException;
-	
-	/** Provides an {@link Iterator} with all (public and private) events from the specified calendar, that begin at the given date {@code startDate}.
-	 * @param calendarName Title of the calendar to identify it.
-	 * @param startDate Starting point of events.
-	 * @return All events that are set to start at {@code startDate}.
-	 * @throws AccessDeniedException When passwords do not match up.
-	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
-	 */
-	public Iterator<IEvent> getAllEventsStartingFrom(String calendarName, Date startDate) throws AccessDeniedException, UnknownCalendarException;
-	
-	/** Provides all (public and private) events at a given {@link Date} from the specified calendar as an {@link ArrayList}.
-	 * @param calendarName Title of the calendar to identify it.
-	 * @param date Date form which to list all events.
-	 * @return All events in the calendar.
-	 * @throws AccessDeniedException When passwords do not match up.
-	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
-	 * @see Authentication#getUser(String, String)
-	 */
-	public ArrayList<IEvent> getAllEventsDate(String calendarName, Date date) throws AccessDeniedException, UnknownCalendarException;
 
 	String getName();
-	
-	
-	////////////////////
-	//ONLY FOR TESTING//
-	////////////////////
-	
+
+	//////////////////////
+	// ONLY FOR TESTING //
+	//////////////////////
+
 	/** Provides a {@link Calendar} object. It can be used to perform further operations on the calendar.
-	 * 
 	 * <p>
 	 * <u><b>Warning</u></b>: This method is only for testing in the IUser interface. Normally the visibility is public but not implemented in the IUser interface!
 	 * </p>
@@ -125,7 +126,7 @@ public interface IUser
 	 * @return The calendar with the corresponding {@code calendarName}.
 	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
 	 */
-	 @OnlyForTesting
+	@OnlyForTesting
 	public Calendar getCalendar(String calendarName) throws UnknownCalendarException;
 
 }

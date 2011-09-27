@@ -19,8 +19,7 @@ public class Event implements IEvent, Comparable<Event>
 	private Date endDate;
 	private boolean isPrivate;
 
-	/**
-	 * Constructor for specific event with the state 'private'
+	/** Constructor for specific event with the state 'private'
 	 * @param eventName A precise name / description for the event
 	 * @param startDate The begin of the mentioned event
 	 * @param endDate The end of the mentioned event
@@ -31,15 +30,13 @@ public class Event implements IEvent, Comparable<Event>
 
 		checkValidDates(startDate, endDate);
 
-
-
 		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.isPrivate = true;
 	}
 
-	private void checkValidDates(Date startDate,Date endDate) throws InvalidDateException
+	private void checkValidDates(Date startDate, Date endDate) throws InvalidDateException
 	{
 		if (startDate.after(endDate))
 		{
@@ -48,9 +45,9 @@ public class Event implements IEvent, Comparable<Event>
 
 	}
 
-	///////////
-	//GETTERS//
-	///////////
+	/////////////
+	// GETTERS //
+	/////////////
 
 	@Override
 	public String getEventName()
@@ -82,9 +79,9 @@ public class Event implements IEvent, Comparable<Event>
 		return !this.isPrivate;
 	}
 
-	///////////
-	//SETTERS//
-	///////////
+	/////////////
+	// SETTERS //
+	/////////////
 
 	public void setEventName(String name)
 	{
@@ -110,9 +107,9 @@ public class Event implements IEvent, Comparable<Event>
 		this.isPrivate = value;
 	}
 
-	///////////
-	//COMPARE//
-	///////////
+	/////////////
+	// COMPARE //
+	/////////////
 
 	@Override
 	public int compareTo(Event eventToCompare)

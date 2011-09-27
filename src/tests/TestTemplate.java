@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * @author Lukas Keller
  * @author Renato Corti
- * 
+ *
  */
 
 public class TestTemplate

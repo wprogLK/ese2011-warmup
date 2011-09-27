@@ -3,8 +3,7 @@
  */
 package tests;
 
-import interfaces.IEvent;
-import interfaces.IUser;
+import interfaces.*;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ import app.AppExceptions.*;
 /**
  * @author Lukas Keller
  * @author Renato Corti
- * 
+ *
  */
 
 @RunWith(JExample.class)
@@ -56,7 +55,7 @@ public class SortTest extends TestTemplate
 		checkSortedEvents.add(e2);
 		checkSortedEvents.add(e3);
 
-		ArrayList<IEvent> sortedEvents = this.userAlpha.getAllEventsDate("MyCalendar", this.stringParseToDate("01.01.1990"));
+		ArrayList<IEvent> sortedEvents = this.userAlpha.getMyCalendarAllEventsAtDate("MyCalendar", this.stringParseToDate("01.01.1990"));
 
 		assertEquals(sortedEvents.size(),checkSortedEvents.size());
 

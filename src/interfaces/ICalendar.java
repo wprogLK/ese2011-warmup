@@ -11,7 +11,12 @@ import app.Event;
 import app.OnlyForTesting;
 import app.AppExceptions.*;
 
-public interface ICalendar 
+/**
+ * @author Lukas Keller
+ * @author Renato Corti
+ *
+ */
+public interface ICalendar
 {
 	public String getName();
 
@@ -21,18 +26,18 @@ public interface ICalendar
 	 * @param startDate Date when events take place.
 	 * @return All public events with {@code startDate} as starting point.
 	 */
-	public Iterator<IEvent> getAllPublicEventsStarting(Date startDate);
+	public Iterator<IEvent> getAllPublicEventsStartingFrom(Date startDate);
 
 	/** Used to get an {@link ArrayList} with public events occurring on a given {@code date}.
 	 * @param date Date form which all public events should be listed.
 	 * @return All public events from a specified calendar.
 	 */
-	public ArrayList<IEvent> getAllPublicEventsDate(Date date);
+	public ArrayList<IEvent> getAllPublicEventsAtDate(Date date);
 
-	////////////////////
-	//ONLY FOR TESTING//
-	////////////////////
-	
+	//////////////////////
+	// ONLY FOR TESTING //
+	//////////////////////
+
 	/** Returns a single event that start at {@code startDate}.
 	 * <p>
 	 * <u><b>Warning</u></b>: This method is only for testing in the {@link IUser} interface. Normally the visibility is public but not implemented in the IUser interface!
