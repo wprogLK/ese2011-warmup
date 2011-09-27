@@ -22,11 +22,11 @@ import app.AppExceptions.*;
 /**
  * @author Lukas Keller
  * @author Renato Corti
+ * 
  */
 
-//FIXME: Rename SimpleTest2 to something like Calendar-specific tests
 @RunWith(JExample.class)
-public class SimpleTest2 extends TestTemplate
+public class CalendarSpecificTests extends TestTemplate
 {
 	private IUser userAlpha;
 	private Calendar calendarAlpha;
@@ -98,7 +98,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("eventNameShouldBeParty")
-	public App eventStartDateShouldBe22_09_2011(App app) throws AccessDeniedException, UnknownEventException, ParseException
+	public App eventStartDateShouldBe22_09_2011(App app) throws UnknownEventException, ParseException
 	{
 		Event eventParty = calendarAlpha.getEvent("Party", this.stringParseToDate("22.09.2011"));
 		assertEquals(eventParty.getStartDate(), this.stringParseToDate("22.09.2011"));
@@ -106,7 +106,7 @@ public class SimpleTest2 extends TestTemplate
 	}
 
 	@Given("eventStartDateShouldBe22_09_2011")
-	public App eventEndDateShouldBe29_09_2011(App app) throws AccessDeniedException, UnknownEventException, ParseException
+	public App eventEndDateShouldBe29_09_2011(App app) throws UnknownEventException, ParseException
 	{
 		Event eventParty = calendarAlpha.getEvent("Party", this.stringParseToDate("22.09.2011"));
 		assertEquals(eventParty.getEndDate(), this.stringParseToDate("29.09.2011"));

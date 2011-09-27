@@ -3,10 +3,8 @@
  */
 package app;
 import interfaces.IEvent;
-
 import java.util.Date;
-
-import app.AppExceptions.InvalidDateException;
+import app.AppExceptions.*;
 
 /**
  * @author Lukas Keller
@@ -26,7 +24,7 @@ public class Event implements IEvent, Comparable<Event>
 	 * @param eventName A precise name / description for the event
 	 * @param startDate The begin of the mentioned event
 	 * @param endDate The end of the mentioned event
-	 * @throws InvalidDateException If the end date is placed before the start date.
+	 * @throws InvalidDateException If {@code endDate} is placed before {@code startDate}.
 	 */
 	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
@@ -109,7 +107,7 @@ public class Event implements IEvent, Comparable<Event>
 
 	public void setPrivateVisibility(boolean value)
 	{
-		this.isPrivate=value;
+		this.isPrivate = value;
 	}
 
 	///////////

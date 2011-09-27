@@ -10,9 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import app.AppExceptions.CalendarIsNotUniqueException;
-import app.AppExceptions.InvalidDateException;
-import app.AppExceptions.UnknownCalendarException;
 import app.AppExceptions.*;
 
 /**
@@ -30,18 +27,13 @@ public class User implements IUser
 
 	/** Constructor for an user object. It contains the {@link Calendar} object.
 	 * @param name The user name must be unique.
-	 * @param app 
 	 */
-	public User(String name, final App app)
+	public User(String name)
 	{
 		this.name = name;
 		this.calendars = new ArrayList<Calendar>();
 	}
 
-	/** Creates a new {@link Calendar} for the specified user.
-	 * @param nameOfCalendar The title of the calendar to be created. The name must be unique.
-	 * @throws CalendarIsNotUniqueException 
-	 */
 	@Override
 	public void createNewCalendar(String nameOfCalendar) throws CalendarIsNotUniqueException
 	{
@@ -62,10 +54,6 @@ public class User implements IUser
 		}
 	}
 
-	/** Removes the calendar including all events in it from the user.
-	 * @param nameOfCalendar The title the calendar was given at creation time.
-	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
-	 */
 	@Override
 	public void deleteCalendar(String nameOfCalendar) throws UnknownCalendarException
 	{
@@ -73,9 +61,6 @@ public class User implements IUser
 		this.calendars.remove(calendarToDelete);
 	}
 
-	/** Provides an {@link ArrayList} with all calendar titles created by the user.
-	 * @return The string literals of the calendars as {@link ArrayList}.
-	 */
 	@Override
 	public ArrayList<String> getAllMyCalendarNames()
 	{
@@ -88,9 +73,6 @@ public class User implements IUser
 		return allCalendarNames;
 	}
 
-	/** Tells, if the user has any calendars.
-	 * @return If the {@link Calendar} {@link ArrayList} is empty, {@code true} is returned, {@code false} in all other cases.
-	 */
 	@Override
 	public boolean hasNoCalendar()
 	{
@@ -110,7 +92,7 @@ public class User implements IUser
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 
-		return calendar.getAllEventsStarting(startDate);
+		return calendar.getAllEventsStartingFrom(startDate);
 	}
 
 	@Override
@@ -189,14 +171,12 @@ public class User implements IUser
 		calendar.deleteEvent(eventName, startDate);
 	}
 
-	//////////////
-	//GET EVENTS//
-	//////////////
+	/* Getters for events */
 
 	@Override
-	public Iterator<IEvent> getAllEventsStarting(String calendarName, Date startDate) throws AccessDeniedException, UnknownCalendarException
+	public Iterator<IEvent> getAllEventsStartingFrom(String calendarName, Date startDate) throws AccessDeniedException, UnknownCalendarException
 	{
-		return this.getCalendar(calendarName).getAllEventsStarting(startDate);
+		return this.getCalendar(calendarName).getAllEventsStartingFrom(startDate);
 	}
 
 	@Override
@@ -212,11 +192,6 @@ public class User implements IUser
 	}
 
 	@Override
-	/** Provides a {@link Calendar} object. It can be used to perform further operations on the calendar.
-	 * @param calendarName The title the calendar was given at creation time.
-	 * @return The calendar with the corresponding {@code calendarName}.
-	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
-	 */
 	public Calendar getCalendar(String calendarName) throws UnknownCalendarException
 	{
 		Iterator<Calendar> iteratorCalendar = this.calendars.iterator();
@@ -230,6 +205,4 @@ public class User implements IUser
 		}
 		throw new UnknownCalendarException(calendarName);
 	}
-
-
 }

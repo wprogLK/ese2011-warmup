@@ -83,7 +83,7 @@ public class AppExceptions
 	public static class InvalidDateException extends Exception
 	{
 		/**
-		 * If {@code endDate} is placed before {@link startDate}.
+		 * If {@code endDate} is placed before {@code startDate}.
 		 */
 		public InvalidDateException(Date startDate, Date endDate)
 		{

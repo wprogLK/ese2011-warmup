@@ -31,7 +31,7 @@ public class App implements IApp
 	@Override
 	public void createUser(String username, String password) throws UsernameAlreadyExistException
 	{
-		this.auth.createNewUser(username, password, this);
+		this.auth.createNewUser(username, password);
 	}
 
 	@Override

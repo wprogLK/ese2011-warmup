@@ -1,3 +1,6 @@
+/**
+ * Calendar framework
+ */
 package interfaces;
 
 import java.util.ArrayList;
@@ -25,27 +28,20 @@ public interface ICalendar
 	 * @return All public events from a specified calendar.
 	 */
 	public ArrayList<IEvent> getAllPublicEventsDate(Date date);
-	
-	
-	
-	
-	
+
 	////////////////////
 	//ONLY FOR TESTING//
 	////////////////////
 	
-	/** Returns a single event.
-	 * 
+	/** Returns a single event that start at {@code startDate}.
 	 * <p>
-	 * <u><b>Warning</u></b>: This method is only for testing in the IUser interface. Normally the visibility is public but not implemented in the IUser interface!
+	 * <u><b>Warning</u></b>: This method is only for testing in the {@link IUser} interface. Normally the visibility is public but not implemented in the IUser interface!
 	 * </p>
-	 * 
 	 * @param eventName Title of the event to return.
 	 * @param startDate The date when the event begins.
-	 * @return The desired event object for reading or messsing up (editing) with.
-	 * @throws AccessDeniedException 
+	 * @return The desired event object for reading or messing up (editing) with.
 	 * @throws UnknownEventException If the event is not in the calendar.
 	 */
 	@OnlyForTesting
-	public Event getEvent(String eventName, Date startDate) throws AccessDeniedException, UnknownEventException;
+	public Event getEvent(String eventName, Date startDate) throws UnknownEventException;
 }

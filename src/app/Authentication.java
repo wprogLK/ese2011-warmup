@@ -54,11 +54,11 @@ public class Authentication
 		}
 	}
 
-	public User createNewUser(String username, String password, App app) throws UsernameAlreadyExistException
+	public User createNewUser(String username, String password) throws UsernameAlreadyExistException
 	{
 		isUsernameUnused(username);
 
-		User newUser = new User(username, app);
+		User newUser = new User(username);
 		this.userDatabase.add(new Tuple(newUser, password));
 		return newUser;
 	}
@@ -86,7 +86,7 @@ public class Authentication
 	 * @param password The secret to verify access.
 	 * @return Provides the {@link User}.
 	 * @throws UnknownUserException If {@code username} is not in the database.
-	 * @throws AccessDeniedException 
+	 * @throws AccessDeniedException When passwords do not match up.
 	 */
 	public User getUser(String username, String password) throws UnknownUserException, AccessDeniedException
 	{

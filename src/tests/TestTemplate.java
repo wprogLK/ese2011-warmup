@@ -1,8 +1,17 @@
+/**
+ * Calendar framework
+ */
 package tests;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+/**
+ * @author Lukas Keller
+ * @author Renato Corti
+ * 
+ */
 
 public class TestTemplate
 {

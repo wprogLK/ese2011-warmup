@@ -15,16 +15,12 @@ import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
 
 import app.*;
-import app.AppExceptions.AccessDeniedException;
-import app.AppExceptions.CalendarIsNotUniqueException;
-import app.AppExceptions.InvalidDateException;
-import app.AppExceptions.UnknownCalendarException;
-import app.AppExceptions.UnknownEventException;
 import app.AppExceptions.*;
 
 /**
  * @author Lukas Keller
  * @author Renato Corti
+ * 
  */
 
 @RunWith(JExample.class)
@@ -37,7 +33,7 @@ public class SortTest extends TestTemplate
 	{
 		App app = new App();
 		app.createUser("Alpha", "123");
-		this.userAlpha= app.loginUser("Alpha", "123");
+		this.userAlpha = app.loginUser("Alpha", "123");
 		return app;
 	}
 
@@ -49,27 +45,27 @@ public class SortTest extends TestTemplate
 		this.userAlpha.createPrivateEvent("MyCalendar", "Event 3", this.stringParseToDate("02.08.2011"), this.stringParseToDate("3.09.2011"));
 		this.userAlpha.createPrivateEvent("MyCalendar", "Event 2", this.stringParseToDate("08.06.2006"), this.stringParseToDate("10.06.2006"));
 
-		Calendar myCalendar=this.userAlpha.getCalendar("MyCalendar");
+		Calendar myCalendar = this.userAlpha.getCalendar("MyCalendar");
 
-		Event e1=myCalendar.getEvent("Event 1", this.stringParseToDate("01.01.2000"));
-		Event e3=myCalendar.getEvent("Event 3", this.stringParseToDate("02.08.2011"));
-		Event e2=myCalendar.getEvent("Event 2", this.stringParseToDate("08.06.2006"));
+		Event e1 = myCalendar.getEvent("Event 1", this.stringParseToDate("01.01.2000"));
+		Event e3 = myCalendar.getEvent("Event 3", this.stringParseToDate("02.08.2011"));
+		Event e2 = myCalendar.getEvent("Event 2", this.stringParseToDate("08.06.2006"));
 
-		ArrayList<IEvent> checkSortedEvents=new ArrayList<IEvent>();
+		ArrayList<IEvent> checkSortedEvents = new ArrayList<IEvent>();
 		checkSortedEvents.add(e1);
 		checkSortedEvents.add(e2);
 		checkSortedEvents.add(e3);
 
-		ArrayList<IEvent> sortedEvents=this.userAlpha.getAllEventsDate("MyCalendar", this.stringParseToDate("01.01.1990"));
+		ArrayList<IEvent> sortedEvents = this.userAlpha.getAllEventsDate("MyCalendar", this.stringParseToDate("01.01.1990"));
 
 		assertEquals(sortedEvents.size(),checkSortedEvents.size());
 
-		for(int i=0;i<sortedEvents.size();i++)
+		for(int i = 0; i < sortedEvents.size(); i++)
 		{
-			IEvent eventCheck=checkSortedEvents.get(i);
-			IEvent eventSorted=sortedEvents.get(i);
+			IEvent eventCheck = checkSortedEvents.get(i);
+			IEvent eventSorted = sortedEvents.get(i);
 
-			assertEquals(eventCheck,eventSorted);
+			assertEquals(eventCheck, eventSorted);
 		}
 		return app;
 	}

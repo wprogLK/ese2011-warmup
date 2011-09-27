@@ -18,10 +18,11 @@ import app.AppExceptions.*;
 /**
  * @author Lukas Keller
  * @author Renato Corti
+ * 
  */
 
 @RunWith(JExample.class)
-public class EventsTest2 extends TestTemplate
+public class EventsTest extends TestTemplate
 {
 	private IUser userAlpha;
 
