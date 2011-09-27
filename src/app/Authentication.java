@@ -69,7 +69,7 @@ public class Authentication
 		{
 			if (t.getUsername().equals(username))
 			{
-				throw new UsernameAlreadyExistException(username); 
+				throw new UsernameAlreadyExistException(username);
 			}
 		}
 	}

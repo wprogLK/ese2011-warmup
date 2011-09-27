@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import app.AppExceptions.CalendarIsNotUniqueException;
 import app.AppExceptions.InvalidDateException;
 import app.AppExceptions.UnknownCalendarException;
 import app.Calendar;
@@ -19,9 +20,9 @@ public interface IUser
 	
 	/** Creates a new {@link Calendar} for the specified user.
 	 * @param nameOfCalendar The title of the calendar to be created.
-	 * @return The created calendar.
-	 * */
-	public void createNewCalendar(String nameOfCalendar);
+	 * @throws CalendarIsNotUniqueException 
+	 */
+	public void createNewCalendar(String nameOfCalendar) throws CalendarIsNotUniqueException;
 
 	/** Removes the calendar including all events in it from the user.
 	 * @param nameOfCalendar The title the calendar was given at creation time.
@@ -63,6 +64,8 @@ public interface IUser
 	public void createPrivateEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException;
 
 	/** Creates a new public event in the given {@link Calendar}.
+	 * @param calendarName 
+	 * @param eventName 
 	 * @param name Title of the event to identify it.
 	 * @param startDate Date of the event to begin.
 	 * @param endDate Date of the event to end.
@@ -70,8 +73,9 @@ public interface IUser
 	 * @throws AccessDeniedException 
 	 * @throws InvalidDateException If the end date is placed before the start date.
 	 * @throws UnknownCalendarException 
+	 * @throws InvalidDateException 
 	 */
-	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException , InvalidDateException;
+	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException, InvalidDateException;
 	
 	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException , InvalidDateException;
 
@@ -94,7 +98,7 @@ public interface IUser
 	 * @param eventName Title of the event to identify it.
 	 * @param startDate Date when the event to be deleted starts.
 	 * @throws UnknownEventException If the event is not in the calendar.
-	 * @throws AccessDeniedException
+	 * @throws AccessDeniedException 
 	 * @throws UnknownCalendarException 
 	 */
 	public void deleteEvent(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException;

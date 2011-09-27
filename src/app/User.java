@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import app.AppExceptions.CalendarIsNotUniqueException;
 import app.AppExceptions.InvalidDateException;
 import app.AppExceptions.UnknownCalendarException;
 import app.AppExceptions.*;
@@ -29,7 +30,7 @@ public class User implements IUser
 
 	/** Constructor for an user object. It contains the {@link Calendar} object.
 	 * @param name The user name must be unique.
-	 * @param app  
+	 * @param app 
 	 */
 	public User(String name, final App app)
 	{
@@ -42,7 +43,7 @@ public class User implements IUser
 	 * @throws CalendarIsNotUniqueException 
 	 */
 	@Override
-	public void createNewCalendar(String nameOfCalendar) 
+	public void createNewCalendar(String nameOfCalendar) throws CalendarIsNotUniqueException
 	{
 		isCalendarnameUnique(nameOfCalendar);
 
@@ -66,7 +67,7 @@ public class User implements IUser
 	 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
 	 */
 	@Override
-	public void deleteCalendar(String nameOfCalendar) throws UnknownCalendarException 
+	public void deleteCalendar(String nameOfCalendar) throws UnknownCalendarException
 	{
 		Calendar calendarToDelete = this.getCalendar(nameOfCalendar);
 		this.calendars.remove(calendarToDelete);
@@ -76,10 +77,10 @@ public class User implements IUser
 	 * @return The string literals of the calendars as {@link ArrayList}.
 	 */
 	@Override
-	public ArrayList<String> getAllMyCalendarNames() 
+	public ArrayList<String> getAllMyCalendarNames()
 	{
 		ArrayList<String> allCalendarNames = new ArrayList<String>();
-		
+
 		for (Calendar c : this.calendars)
 		{
 			allCalendarNames.add(c.getName());
@@ -91,98 +92,98 @@ public class User implements IUser
 	 * @return If the {@link Calendar} {@link ArrayList} is empty, {@code true} is returned, {@code false} in all other cases.
 	 */
 	@Override
-	public boolean hasNoCalendar() 
+	public boolean hasNoCalendar()
 	{
 		return this.calendars.isEmpty();
 	}
 
 	@Override
-	public ArrayList<IEvent> getMyCalendarAllEventsDate(String calendarName,Date date) throws UnknownCalendarException, AccessDeniedException 
+	public ArrayList<IEvent> getMyCalendarAllEventsDate(String calendarName,Date date) throws UnknownCalendarException, AccessDeniedException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-		
+
 		return calendar.getAllEventsDate(date);
 	}
 
 	@Override
-	public Iterator<IEvent> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException, AccessDeniedException 
+	public Iterator<IEvent> getMyCalendarAllEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException, AccessDeniedException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-		
+
 		return calendar.getAllEventsStarting(startDate);
 	}
 
 	@Override
-	public Iterator<IEvent> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException 
+	public Iterator<IEvent> getMyCalendarPublicEventsStarting(String calendarName, Date startDate) throws UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-		
+
 		return calendar.getAllPublicEventsStarting(startDate);
 	}
 
 	@Override
-	public ArrayList<IEvent> getMyCalendarPublicEventsDate(String calendarName, Date date) throws UnknownCalendarException 
+	public ArrayList<IEvent> getMyCalendarPublicEventsDate(String calendarName, Date date) throws UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-	
+
 		return calendar.getAllPublicEventsDate(date);
 	}
 
 	/* Operation on events */
 
 	@Override
-	public void createPrivateEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException 
+	public void createPrivateEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-		
+
 		calendar.createPrivateEvent(eventName, startDate, endDate);
 	}
 
 	@Override
-	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException 
+	public void createPublicEvent(String calendarName, String eventName, Date startDate, Date endDate) throws AccessDeniedException, InvalidDateException, UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
-		
+
 		calendar.createPublicEvent(eventName, startDate, endDate);
 	}
 
 	@Override
-	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
+	public void editEventName(String calendarName, String eventName, Date startDate, String newEventName) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.editEvent(eventName, startDate, newEventName, null, null, null);
 	}
 
 	@Override
-	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
+	public void editEventStartDate(String calendarName, String eventName, Date startDate, Date newStartDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.editEvent(eventName, startDate, null, newStartDate, null, null);
 	}
 
 	@Override
-	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
+	public void editEventEndDate(String calendarName, String eventName, Date startDate, Date newEndDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.editEvent(eventName, startDate, null, null, newEndDate, null);
 	}
 
 	@Override
-	public void editEventStateToPublic(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
+	public void editEventStateToPublic(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.editEvent(eventName, startDate, null, null, null, false);
 	}
 
 	@Override
-	public void editEventStateToPrivate(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException 
+	public void editEventStateToPrivate(String calendarName, String eventName, Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException, InvalidDateException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.editEvent(eventName, startDate, null, null, null, true);
 	}
 
 	@Override
-	public void deleteEvent(String calendarName, String eventName,Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException 
+	public void deleteEvent(String calendarName, String eventName,Date startDate) throws AccessDeniedException, UnknownEventException, UnknownCalendarException
 	{
 		Calendar calendar = this.getCalendar(calendarName);
 		calendar.deleteEvent(eventName, startDate);
@@ -191,19 +192,19 @@ public class User implements IUser
 	//////////////
 	//GET EVENTS//
 	//////////////
-	
+
 	@Override
-	public Iterator<IEvent> getAllEventsStarting(String calendarName, Date startDate) throws AccessDeniedException, UnknownCalendarException 
+	public Iterator<IEvent> getAllEventsStarting(String calendarName, Date startDate) throws AccessDeniedException, UnknownCalendarException
 	{
 		return this.getCalendar(calendarName).getAllEventsStarting(startDate);
 	}
 
 	@Override
-	public ArrayList<IEvent> getAllEventsDate(String calendarName, Date date) throws AccessDeniedException, UnknownCalendarException 
+	public ArrayList<IEvent> getAllEventsDate(String calendarName, Date date) throws AccessDeniedException, UnknownCalendarException
 	{
 		return this.getCalendar(calendarName).getAllEventsDate(date);
 	}
-	
+
 	@Override
 	public String getName()
 	{

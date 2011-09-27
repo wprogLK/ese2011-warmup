@@ -4,12 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import app.Calendar;
 import app.Event;
 import app.OnlyForTesting;
-import app.AppExceptions.AccessDeniedException;
-import app.AppExceptions.UnknownCalendarException;
-import app.AppExceptions.UnknownEventException;
+import app.AppExceptions.*;
 
 public interface ICalendar 
 {

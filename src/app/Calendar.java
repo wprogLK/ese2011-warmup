@@ -37,19 +37,19 @@ public class Calendar implements ICalendar
 	}
 
 	@Override
-	public String getName() 
+	public String getName()
 	{
 		return this.name;
 	}
 
 	@Override
-	public Iterator<IEvent> getAllPublicEventsStarting(Date startDate) 
+	public Iterator<IEvent> getAllPublicEventsStarting(Date startDate)
 	{
 		return this.getEventsWithStartDateOrMore(startDate, this.publicEvents).iterator();
 	}
 
 	@Override
-	public ArrayList<IEvent> getAllPublicEventsDate(Date date) 
+	public ArrayList<IEvent> getAllPublicEventsDate(Date date)
 	{
 		return this.getEventsWithDate(date, this.publicEvents);
 	}
@@ -108,7 +108,6 @@ public class Calendar implements ICalendar
 		return eventList.iterator();
 	}
 
-
 	/** Provides all (public and private) events at a given {@code date} from the specified calendar as an {@link ArrayList}.
 	 * @param date Date form which to list all events.
 	 * at his / her disposal (not the user name as string) because
@@ -125,7 +124,6 @@ public class Calendar implements ICalendar
 		this.sortEvents(eventList);
 		return this.getEventsWithDate(date, eventList);
 	}
-	
 
 	/** Returns a single event.
 	 * @param eventName Title of the event to return.
@@ -152,31 +150,30 @@ public class Calendar implements ICalendar
 
 	/* Functions used to modify events */
 
-	
 	public void editEvent(String eventName, Date startDate, String newEventName, Date newStartDate, Date newEndDate, Boolean newPrivateVisible) throws AccessDeniedException, UnknownEventException, InvalidDateException
 	{
 		Event e=this.getEvent(eventName, startDate);
-		
+
 		if(newEventName!=null)
 		{
 			e.setEventName(newEventName);
 		}
-		
-		if(newStartDate!=null)
+
+		if(newStartDate != null)
 		{
 			e.setStartDate(newStartDate);
 		}
-		
-		if(newEndDate!=null)
+
+		if(newEndDate != null)
 		{
 			e.setEndDate(newEndDate);
 		}
-		
-		if(newPrivateVisible!=null)
+
+		if(newPrivateVisible != null)
 		{
 			e.setPrivateVisibility(newPrivateVisible);
 		}
-	}	
+	}
 
 	/* Private methods */
 
@@ -186,7 +183,7 @@ public class Calendar implements ICalendar
 		ArrayList<IEvent> output = new ArrayList<IEvent>();
 		for (IEvent event : events)
 		{
-			if (event.getEndDate().after(date))
+			if (event.getEndDate().after(date) || event.getEndDate().equals(date))
 			{
 				output.add(event);
 			}
@@ -200,7 +197,7 @@ public class Calendar implements ICalendar
 		ArrayList<IEvent> output = new ArrayList<IEvent>();
 		for (IEvent event : events)
 		{
-			if (event.getStartDate().after(startDate) || event.getStartDate().equals(startDate))
+			if (event.getStartDate().after(startDate) || event.getStartDate().equals(startDate)) // = if (! event.getStartDate().before(startDate))
 			{
 				output.add(event);
 			}
@@ -212,23 +209,22 @@ public class Calendar implements ICalendar
 	{
 		IEvent[] arrayOfEvents = new IEvent[inputList.size()];
 		inputList.toArray(arrayOfEvents);
-		
+
 		Arrays.sort(arrayOfEvents);
-		
+
 		inputList.clear();
-		
+
 		for(IEvent e: arrayOfEvents)
 		{
 			inputList.add(e);
 		}
 	}
 
-
 	/** Deletes the event from the calendar.
 	 * @param eventName Title of the event to identify it.
 	 * @param startDate Date when the event to be deleted starts.
 	 * @throws UnknownEventException If the event is not in the calendar.
-	 * @throws AccessDeniedException
+	 * @throws AccessDeniedException 
 	 */
 	public void deleteEvent(String eventName, Date startDate) throws AccessDeniedException, UnknownEventException
 	{

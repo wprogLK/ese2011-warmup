@@ -71,7 +71,7 @@ public interface IApp
 		 * @return An {@link Iterator} with all public events that start at {@code startDate}.
 		 * @throws UnknownUserException If {@code username} is not in the database.
 		 * @throws UnknownCalendarException If the {@code user} has no calendar with such a name.
-		 * @throws AccessDeniedException
+		 * @throws AccessDeniedException 
 		 */
 		public Iterator<IEvent> getUsersCalendarPublicEvents(String username, String calendarName, Date startDate) throws UnknownUserException, UnknownCalendarException, AccessDeniedException;
 
@@ -83,7 +83,7 @@ public interface IApp
 		 * Not to be confused with the {@link Authentication#getUser(String, String)} function
 		 * which is used for internal processing.
 		 * @throws UnknownUserException If {@code username} is not in the database.
-		 * @throws AccessDeniedException
+		 * @throws AccessDeniedException 
 		 */
 		public IUser loginUser(String username, String password) throws UnknownUserException, AccessDeniedException;
 	}

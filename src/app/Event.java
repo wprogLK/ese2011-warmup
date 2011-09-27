@@ -20,7 +20,7 @@ public class Event implements IEvent, Comparable<Event>
 	private Date startDate;
 	private Date endDate;
 	private boolean isPrivate;
-	
+
 	/**
 	 * Constructor for specific event with the state 'private'
 	 * @param eventName A precise name / description for the event
@@ -30,56 +30,56 @@ public class Event implements IEvent, Comparable<Event>
 	 */
 	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
-		
+
 		checkValidDates(startDate, endDate);
-		
-		
+
+
 
 		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.isPrivate = true;
 	}
-	
-	private void checkValidDates(Date startDate,Date endDate) throws InvalidDateException 
+
+	private void checkValidDates(Date startDate,Date endDate) throws InvalidDateException
 	{
 		if (startDate.after(endDate))
 		{
 			throw new InvalidDateException(startDate, endDate);
 		}
-		
+
 	}
 
 	///////////
 	//GETTERS//
 	///////////
-	
+
 	@Override
-	public String getEventName() 
+	public String getEventName()
 	{
 		return this.eventName;
 	}
 
 	@Override
-	public Date getStartDate() 
+	public Date getStartDate()
 	{
 		return this.startDate;
 	}
 
 	@Override
-	public Date getEndDate() 
+	public Date getEndDate()
 	{
 		return this.endDate;
 	}
 
 	@Override
-	public boolean isPrivate() 
+	public boolean isPrivate()
 	{
 		return this.isPrivate;
 	}
 
 	@Override
-	public boolean isPublic() 
+	public boolean isPublic()
 	{
 		return !this.isPrivate;
 	}
@@ -96,14 +96,14 @@ public class Event implements IEvent, Comparable<Event>
 	public void setStartDate(Date startDate) throws InvalidDateException
 	{
 		checkValidDates(startDate, this.endDate);
-		
+
 		this.startDate = startDate;
 	}
 
 	public void setEndDate(Date endDate) throws InvalidDateException
 	{
 		checkValidDates(this.startDate, endDate);
-		
+
 		this.endDate = endDate;
 	}
 
@@ -111,13 +111,13 @@ public class Event implements IEvent, Comparable<Event>
 	{
 		this.isPrivate=value;
 	}
-	
+
 	///////////
 	//COMPARE//
 	///////////
-	
+
 	@Override
-	public int compareTo(Event eventToCompare) 
+	public int compareTo(Event eventToCompare)
 	{
 		if(this.startDate.before(eventToCompare.getStartDate()))
 		{
@@ -132,5 +132,4 @@ public class Event implements IEvent, Comparable<Event>
 			return 0;
 		}
 	}
-	
 }

@@ -1,5 +1,5 @@
 package app;
 
-public @interface OnlyForTesting {
-
+public @interface OnlyForTesting
+{
 }

@@ -39,9 +39,6 @@ public class AppExceptions
 	public static class AccessDeniedException extends Exception
 	{
 		/**
-		 * When {@link User} and owner do not match.
-		 */
-		/**
 		 * When passwords do not match up.
 		 */
 		public AccessDeniedException(String username)
@@ -68,7 +65,7 @@ public class AppExceptions
 		 */
 		public CalendarIsNotUniqueException(Calendar calendar)
 		{
-			super(String.format("User \"%s\" already has a calendar named \"%s\" in the calendar list!", calendar.getOwner(), calendar.getName()));
+			super(String.format("User \"%s\" already has a calendar named \"%s\" in the calendar list!", calendar.getOwner().getName(), calendar.getName()));
 		}
 	}
 

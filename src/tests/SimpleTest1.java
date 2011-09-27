@@ -13,6 +13,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 
 import app.App;
+import app.AppExceptions;
 import app.AppExceptions.*;
 import app.Calendar;
 import app.Event;
@@ -39,7 +40,7 @@ public class SimpleTest1 extends TestTemplate
 		App app = new App();
 		return app;
 	}
-	
+
 	@Test
 	/**
 	 * Only for a better coverage ;-)
@@ -54,7 +55,7 @@ public class SimpleTest1 extends TestTemplate
 	{
 		app.createUser("Alpha", "123");
 		this.userAlpha=app.loginUser("Alpha", "123");
-		
+
 		assertEquals(userAlpha.getName(), "Alpha");
 		return app;
 	}
@@ -71,17 +72,17 @@ public class SimpleTest1 extends TestTemplate
 		{
 			assertNotNull(e);
 		}
-		
-		try 
+
+		try
 		{
 			app.loginUser("Alpha", "456");
 			fail("AccessDeniedException expected!");
-		} 
-		catch (AccessDeniedException e) 
+		}
+		catch (AccessDeniedException e)
 		{
 			assertNotNull(e);
 		}
-		
+
 		return app;
 	}
 
@@ -148,7 +149,7 @@ public class SimpleTest1 extends TestTemplate
 	{
 		userAlpha.createNewCalendar("My calendar");
 		Calendar myCalendar;
-		
+
 		myCalendar = this.userAlpha.getCalendar("My calendar");
 
 		assertEquals(myCalendar.getOwner(), userAlpha);
@@ -163,7 +164,7 @@ public class SimpleTest1 extends TestTemplate
 		userAlpha.createPublicEvent("Short-living calendar", "My public event", this.stringParseToDate("23.01.2011"), this.stringParseToDate("23.08.2011"));
 
 		userAlpha.deleteCalendar("Short-living calendar");
-		
+
 		try
 		{
 			userAlpha.getCalendar("Short-living calendar");
@@ -182,9 +183,9 @@ public class SimpleTest1 extends TestTemplate
 	public App eventShouldBePrivate (App app) throws UnknownCalendarException, AccessDeniedException, InvalidDateException, UnknownEventException, ParseException
 	{
 		this.userAlpha.createPrivateEvent("My calendar", "My private event", this.stringParseToDate("22.01.2011"), this.stringParseToDate("22.08.2011"));
-		
+
 		Event myPrivateEvent=this.userAlpha.getCalendar("My calendar").getEvent("My private event",this.stringParseToDate("22.01.2011"));
-		
+
 		assertTrue(myPrivateEvent.isPrivate());
 		return app;
 	}
@@ -222,9 +223,9 @@ public class SimpleTest1 extends TestTemplate
 	public App userBetaShouldNotAccessForeignUserAcount(App app) throws UsernameAlreadyExistException, UnknownUserException, AccessDeniedException
 	{
 		app.createUser("Beta", "abc");
-		
+
 		this.userBeta=app.loginUser("Beta", "abc");
-		
+
 		IUser hackedAccount = null;
 		try
 		{
@@ -252,7 +253,7 @@ public class SimpleTest1 extends TestTemplate
 	public App userBetaShouldSeePublicEventsFromForeignCalendar(App app) throws UnknownUserException, UnknownCalendarException, AccessDeniedException, ParseException
 	{
 		Iterator<IEvent> iteratorPublicEvents = app.getUsersCalendarPublicEvents("Alpha", "My calendar", this.stringParseToDate("22.01.2011"));
-		
+
 		int i = 0;
 		while(iteratorPublicEvents.hasNext())
 		{
@@ -323,6 +324,4 @@ public class SimpleTest1 extends TestTemplate
 		assertNull(phantomEvent);
 		return app;
 	}
-
-
 }
