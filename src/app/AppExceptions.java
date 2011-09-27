@@ -11,7 +11,7 @@ import java.util.Date;
  *
  */
 
-public abstract class AppExceptions
+public class AppExceptions
 {
 
 	public static class UnknownUserException extends Exception
@@ -41,11 +41,6 @@ public abstract class AppExceptions
 		/**
 		 * When {@link User} and owner do not match.
 		 */
-		public AccessDeniedException(Calendar calendar)
-		{
-			super(String.format("User \"%s\" did not give you permission to create, edit or delete events in the calendar \"%s\"!", calendar.getOwner().getName(), calendar.getName()));
-		}
-
 		/**
 		 * When passwords do not match up.
 		 */
