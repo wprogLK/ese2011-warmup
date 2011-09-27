@@ -2,8 +2,11 @@
  * Calendar framework
  */
 package app;
+import interfaces.IEvent;
+
 import java.util.Date;
-import app.AppExceptions.*;
+
+import app.AppExceptions.InvalidDateException;
 
 /**
  * @author Lukas Keller
@@ -11,19 +14,13 @@ import app.AppExceptions.*;
  *
  */
 
-public class Event
+public class Event implements IEvent, Comparable<Event>
 {
-	private enum State
-	{
-	 PUBLIC,
-	 PRIVATE
-	}
-
 	private String eventName;
 	private Date startDate;
 	private Date endDate;
-	private State visibility;
-
+	private boolean isPrivate;
+	
 	/**
 	 * Constructor for specific event with the state 'private'
 	 * @param eventName A precise name / description for the event
@@ -33,68 +30,107 @@ public class Event
 	 */
 	public Event(String eventName, Date startDate, Date endDate) throws InvalidDateException
 	{
-		if (startDate.after(endDate))
-		{
-			throw new InvalidDateException(startDate, endDate);
-		}
+		
+		checkValidDates(startDate, endDate);
+		
+		
 
 		this.eventName = eventName;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.visibility = State.PRIVATE;
+		this.isPrivate = true;
+	}
+	
+	private void checkValidDates(Date startDate,Date endDate) throws InvalidDateException 
+	{
+		if (startDate.after(endDate))
+		{
+			throw new InvalidDateException(startDate, endDate);
+		}
+		
 	}
 
-	/* Getters */
-
-	public String getEventName()
+	///////////
+	//GETTERS//
+	///////////
+	
+	@Override
+	public String getEventName() 
 	{
 		return this.eventName;
 	}
-	
-	public Date getStartDate()
+
+	@Override
+	public Date getStartDate() 
 	{
 		return this.startDate;
 	}
 
-	public Date getEndDate()
+	@Override
+	public Date getEndDate() 
 	{
 		return this.endDate;
 	}
 
-	public boolean isPrivate()
+	@Override
+	public boolean isPrivate() 
 	{
-		return (this.visibility == State.PRIVATE);
+		return this.isPrivate;
 	}
 
-	public boolean isPublic()
+	@Override
+	public boolean isPublic() 
 	{
-		return (this.visibility == State.PUBLIC);
+		return !this.isPrivate;
 	}
 
-	/* Setters*/
+	///////////
+	//SETTERS//
+	///////////
 
 	public void setEventName(String name)
 	{
 		this.eventName = name;
 	}
 
-	public void setStartDate(Date startDate)
+	public void setStartDate(Date startDate) throws InvalidDateException
 	{
+		checkValidDates(startDate, this.endDate);
+		
 		this.startDate = startDate;
 	}
 
-	public void setEndDate(Date endDate)
+	public void setEndDate(Date endDate) throws InvalidDateException
 	{
+		checkValidDates(this.startDate, endDate);
+		
 		this.endDate = endDate;
 	}
 
-	public void setStatePublic()
+	public void setPrivateVisibility(boolean value)
 	{
-		this.visibility = State.PUBLIC;
+		this.isPrivate=value;
 	}
-
-	public void setStatePrivate()
+	
+	///////////
+	//COMPARE//
+	///////////
+	
+	@Override
+	public int compareTo(Event eventToCompare) 
 	{
-		this.visibility = State.PRIVATE;
+		if(this.startDate.before(eventToCompare.getStartDate()))
+		{
+			return -1;
+		}
+		else if(this.startDate.after(eventToCompare.getStartDate()))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
+	
 }
